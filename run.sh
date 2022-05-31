@@ -5,11 +5,11 @@
 # By gabrielrih <gabrielrih@gmail.com>
 #
 
-INTERVAL_TO_TEST_CONNECTION_IN_SECONDS=2
+INTERVAL_TO_TEST_CONNECTION_IN_SECONDS=30
 LOG_FOLDER="/var/log/testerNlogger"
 LOG_FILENAME="connection.log" # in runtime this name is changed
 LOG_WHEN_CHANGE_FILENAME="changeHistory.log"
-CLEAR_ALL_LOG_FILES_EVERY_START=false
+CLEAR_ALL_LOG_FILES_EVERY_START=true
 LOG_FULL_PATH=$LOG_FOLDER/$LOG_FILENAME
 LOG_ON_CHANGE_FULL_PATH=$LOG_FOLDER/$LOG_WHEN_CHANGE_FILENAME
 
@@ -51,7 +51,7 @@ logEverything() {
 
 cleaningLogFiles() {
     echo "[!] Deleting all log files!"
-    rm -r $LOG_FOLDER
+    if [ -d $LOG_FOLDER ]; then rm -r $LOG_FOLDER; fi
 }
 
 echo "Testing WAN connection every $INTERVAL_TO_TEST_CONNECTION_IN_SECONDS seconds..."

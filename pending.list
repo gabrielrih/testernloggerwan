@@ -1,0 +1,3 @@
+- Deletar logs antigos (mais de 30 dias por exemplo)
+- Ansible para configuração do repo lá no Linux?
+- Adicionar redundância no teste da conexão. Se falhar Google testa outro provedor antes de considerar que a WAN está down.

@@ -1,0 +1,5 @@
+# log just when connection status was changed
+date|time|status|
+2022-05-30|20:21:00|down|
+2022-05-30|20:22:00|up|
+2022-05-30|20:23:00|down|

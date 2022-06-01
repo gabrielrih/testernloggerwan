@@ -5,11 +5,13 @@
 # By gabrielrih <gabrielrih@gmail.com>
 #
 
-INTERVAL_TO_TEST_CONNECTION_IN_SECONDS=30
+INTERVAL_TO_TEST_CONNECTION_IN_SECONDS=60
+IS_TO_SAVE_DETAIL_LOGS=false
+CLEAR_ALL_LOG_FILES_EVERY_START=false
+IS_TO_PRINT_LOG_IN_STDOUT=true
 LOG_FOLDER="/var/log/testerNlogger"
 LOG_FILENAME="connection.log" # in runtime this name is changed
 LOG_WHEN_CHANGE_FILENAME="changeHistory.log"
-CLEAR_ALL_LOG_FILES_EVERY_START=true
 LOG_FULL_PATH=$LOG_FOLDER/$LOG_FILENAME
 LOG_ON_CHANGE_FULL_PATH=$LOG_FOLDER/$LOG_WHEN_CHANGE_FILENAME
 
@@ -26,27 +28,29 @@ testConnection() {
 }
 
 createLogContent() {
+    currentDate=$(date +%Y-%m-%d)
+    currentTime=$(date +%H:%M:%S)
     if [ $isDown -eq 1 ]; then status='down'; else status='up'; fi
-    logContent="$currentDate|$currentTime|$status|"
+    logContent="$currentDate|$currentTime|$status|" # Format: date|time|status|
 }
 
 logWhenStatusChanged() {
     if [ ! $isDownLast ]; then isDownLast=2; fi # first execution. Force value two to print changed log
-    # log file. Format: date|time|status|
     if [ ! -f $LOG_ON_CHANGE_FULL_PATH ]; then echo "date|time|status|" >> $LOG_ON_CHANGE_FULL_PATH; fi # print header if log file doesn't exists
-    if [ $isDown -ne $isDownLast ]; then echo $logContent >> $LOG_ON_CHANGE_FULL_PATH; fi
-    # set current as last
-    isDownLast=$isDown
+    if [ $isDown -ne $isDownLast ]; then echo $logContent >> $LOG_ON_CHANGE_FULL_PATH; fi # it saves the log when status changed
+    isDownLast=$isDown # set current as last
 }
 
 logEverything() {
-    # standard stdout
+    logFullPathWithDate=$(echo $LOG_FULL_PATH | sed "s/\.log/-$currentDate.log/g") # add date in log filename
+    if [ ! -f $logFullPathWithDate ]; then echo "date|time|status|" >> $logFullPathWithDate; fi # print header if log file doesn't exists
+    echo $logContent >> $logFullPathWithDate # it saves the log
+}
+
+# standard stdout
+printInStdout() {
     currentDatetime=$currentDate"T"$currentTime
     if [ $isDown -eq 1 ]; then echo "[-] Connection is DOWN! ($currentDatetime)"; else echo "[+] Connection is UP! ($currentDatetime)"; fi
-    # log file. Format: date|time|status|
-    logFullPathWithDate=$(echo $LOG_FULL_PATH | sed "s/\.log/-$currentDate.log/g")
-    if [ ! -f $logFullPathWithDate ]; then echo "date|time|status|" >> $logFullPathWithDate; fi # print header if log file doesn't exists
-    echo $logContent >> $logFullPathWithDate
 }
 
 cleaningLogFiles() {
@@ -58,13 +62,12 @@ echo "Testing WAN connection every $INTERVAL_TO_TEST_CONNECTION_IN_SECONDS secon
 if [ $CLEAR_ALL_LOG_FILES_EVERY_START == true ]; then cleaningLogFiles; fi
 while true
 do
-    currentDate=$(date +%Y-%m-%d)
-    currentTime=$(date +%H:%M:%S)
     testConnection
     if [ ! -d $LOG_FOLDER ]; then mkdir $LOG_FOLDER; fi
     createLogContent
     logWhenStatusChanged
-    logEverything
+    if [ $IS_TO_SAVE_DETAIL_LOGS == true ]; then logEverything; fi
+    if [ $IS_TO_PRINT_LOG_IN_STDOUT == true ]; then printInStdout; fi
     sleep $INTERVAL_TO_TEST_CONNECTION_IN_SECONDS
 done
 

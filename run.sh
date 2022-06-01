@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Tester N Logger
-# It test and log the wan connection status.
+# It tests and it logs the wan connection status.
 # By gabrielrih <gabrielrih@gmail.com>
 #
 

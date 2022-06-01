@@ -1,0 +1,11 @@
+[Unit]
+Description=It tests the WAN connection all the time
+
+[Service]
+User=root
+WorkingDirectory=/opt/testerNlogger/
+ExecStart=/opt/testerNlogger/run.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

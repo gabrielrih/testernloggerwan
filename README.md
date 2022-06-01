@@ -1,2 +1,2 @@
 # testerNloggerWAN
-Tester and logger the WAN connection.
+It tests the WAN connection and it logs the status on every change.

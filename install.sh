@@ -21,10 +21,14 @@ if [ ! -d $FULL_INSTALL_FOLDER ]; then mkdir $FULL_INSTALL_FOLDER; fi
 cp -R ./testerNlogger $FULL_INSTALL_FOLDER
 cp -R ./service $FULL_INSTALL_FOLDER
 
-# Symbolic link
-echo "[+] Creating symbolic link..."
-symbolicLinkIsCreated=$(ls /etc/systemd/system | grep $SERVICE_TEMPLATE_FILENAME | wc -l)
-if [ $symbolicLinkIsCreated -eq 1 ]; then rm /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME; fi
+# Symbolic link for the install folder
+echo "[+] Creating symbolic link for install folder..."
+if [ -L $INSTALL_FOLDER ]; then rm $INSTALL_FOLDER; fi
+ln -s $FULL_INSTALL_FOLDER $INSTALL_FOLDER 
+
+# Symbolic link for the service
+echo "[+] Creating symbolic link for the service..."
+if [ -L /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME ]; then rm /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME; fi
 ln -s $INSTALL_FOLDER/$SERVICE_TEMPLATE_FILENAME /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME
 
 # Service

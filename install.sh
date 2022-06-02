@@ -5,7 +5,7 @@
 #
 
 VERSION="1.1.0"
-INSTALL_FOLDER="/opt/testernlogger"
+INSTALL_FOLDER="/opt/testerNlogger"
 SERVICE_TEMPLATE_FILENAME="testernlogger.service"
 
 # Is it root?
@@ -18,8 +18,8 @@ fi
 echo "[+] Copying files to install folder..."
 FULL_INSTALL_FOLDER=$INSTALL_FOLDER"-"$VERSION
 if [ ! -d $FULL_INSTALL_FOLDER ]; then mkdir $FULL_INSTALL_FOLDER; fi
-cp -R ./testerNlogger $INSTALL_FOLDER
-cp -R ./service $INSTALL_FOLDER
+cp -R ./testerNlogger $FULL_INSTALL_FOLDER
+cp -R ./service $FULL_INSTALL_FOLDER
 
 # Symbolic link
 echo "[+] Creating symbolic link..."

@@ -11,7 +11,7 @@ INTERVAL_TO_TEST_CONNECTION_IN_SECONDS=60
 # Debugging and testing configurations
 IS_TO_SAVE_DETAIL_LOGS=false
 CLEAR_ALL_LOG_FILES_EVERY_START=false
-IS_TO_PRINT_LOG_IN_STDOUT=true
+IS_TO_PRINT_LOG_IN_STDOUT=false
 
 # File and folders configurations
 LOG_FOLDER="/var/log/testerNlogger"

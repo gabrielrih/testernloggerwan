@@ -7,7 +7,7 @@
 # By gabrielrih <gabrielrih@gmail.com>
 #
 
-VERSION="1.1.0"
+VERSION="1.1.1"
 
 # Installation configurations
 INSTALL_FOLDER="/opt/testerNlogger"
@@ -34,15 +34,18 @@ echo "[+] Creating symbolic link for install folder..."
 if [ -L $INSTALL_FOLDER ]; then rm $INSTALL_FOLDER; fi
 ln -s $FULL_INSTALL_FOLDER $INSTALL_FOLDER 
 
+# Stopping and disable service (if it was already created earlier)
+echo "[+] Removing service..."
+systemctl stop $SERVICE_TEMPLATE_FILENAME
+systemctl disable $SERVICE_TEMPLATE_FILENAME
+
 # Symbolic link for the service
 echo "[+] Creating symbolic link for the service..."
 if [ -L /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME ]; then rm /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME; fi
-ln -s $INSTALL_FOLDER/service/$SERVICE_TEMPLATE_FILENAME /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME
+ln -s $INSTALL_FOLDER/$SERVICE_TEMPLATE_FILENAME /etc/systemd/system/$SERVICE_TEMPLATE_FILENAME
 
-# Service
+# Starting service
 echo "[+] Configuring service..."
-systemctl stop $SERVICE_TEMPLATE_FILENAME
-systemctl disable $SERVICE_TEMPLATE_FILENAME
 systemctl daemon-reload
 systemctl start $SERVICE_TEMPLATE_FILENAME
 systemctl enable $SERVICE_TEMPLATE_FILENAME

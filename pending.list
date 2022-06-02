@@ -1,3 +1,4 @@
-- Deletar logs antigos (mais de 30 dias por exemplo)
-- Ansible para configuração do repo lá no Linux?
 - Adicionar redundância no teste da conexão. Se falhar Google testa outro provedor antes de considerar que a WAN está down.
+- Adicionar arquivo de configuração
+    /etc/testernlogger/testernlogger.config
+    Criar isso no install.sh e tratar para que pegue os valores no run.sh a partir deste testernlogger.config

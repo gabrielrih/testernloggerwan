@@ -32,6 +32,13 @@ fi
 testConnection() {
     if [ ! -d $TMP_FOLDER ]; then mkdir $TMP_FOLDER; fi
     ping 8.8.8.8 -c 1 > $TMP_FOLDER/.result.tmp
+    checkIfConnectionIsDown
+    if [ $isDown -eq 1 ]; then ping 1.1.1.1 -c 1 > $TMP_FOLDER/.result.tmp; fi
+    checkIfConnectionIsDown
+    return $isDown
+}
+
+checkIfConnectionIsDown() {
     isDown=$(cat $TMP_FOLDER/.result.tmp | grep "100% packet loss" | wc -l)
     return $isDown
 }

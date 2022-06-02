@@ -1,4 +1,5 @@
-- Adicionar redundância no teste da conexão. Se falhar Google testa outro provedor antes de considerar que a WAN está down.
 - Adicionar arquivo de configuração
     /etc/testernlogger/testernlogger.config
     Criar isso no install.sh e tratar para que pegue os valores no run.sh a partir deste testernlogger.config
+
+- Adicionar opções de debug como parâmetros (que são precedentes as opções no arquivo de configuração)

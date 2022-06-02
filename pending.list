@@ -3,3 +3,5 @@
     Criar isso no install.sh e tratar para que pegue os valores no run.sh a partir deste testernlogger.config
 
 - Adicionar opções de debug como parâmetros (que são precedentes as opções no arquivo de configuração)
+
+- Melhorar o README.md

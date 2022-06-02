@@ -6,16 +6,22 @@ The test connection works sending a ping packet to Google DNS server and if it f
 Here we have a example of how to install it in a Linux machine. Just pay attention to install the latest version.
 ``
 cd /tmp
+
 wget https://github.com/gabrielrih/testerNloggerWAN/archive/refs/tags/1.1.0.tar.gz
+
 tar -xf 1.1.0.tar.gz
+
 cd testerNlogger-1.1.0
+
 sudo chmod 744 install.sh
+
 sudo ./install.sh
+
 ``
 
 ## How to check the log file?
 ``
-tail -f /var/log/testernlogger/changed.log
+tail -f /var/log/testernlogger/changeHistory.log
 ``
 
 

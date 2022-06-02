@@ -5,13 +5,21 @@
 # By gabrielrih <gabrielrih@gmail.com>
 #
 
+# Interval configurations
 INTERVAL_TO_TEST_CONNECTION_IN_SECONDS=60
+
+# Debugging and testing configurations
 IS_TO_SAVE_DETAIL_LOGS=false
 CLEAR_ALL_LOG_FILES_EVERY_START=false
 IS_TO_PRINT_LOG_IN_STDOUT=true
+
+# File and folders configurations
 LOG_FOLDER="/var/log/testerNlogger"
 LOG_FILENAME="connection.log" # in runtime this name is changed
 LOG_WHEN_CHANGE_FILENAME="changeHistory.log"
+TMP_FOLDER="/tmp/testerNlogger" # used for creating temporary files
+
+# Do not change it
 LOG_FULL_PATH=$LOG_FOLDER/$LOG_FILENAME
 LOG_ON_CHANGE_FULL_PATH=$LOG_FOLDER/$LOG_WHEN_CHANGE_FILENAME
 
@@ -22,8 +30,9 @@ if [ $(whoami) != root ]; then
 fi
 
 testConnection() {
-    ping 8.8.8.8 -c 1 > .result.tmp
-    isDown=$(cat .result.tmp | grep "100% packet loss" | wc -l)
+    if [ ! -d $TMP_FOLDER ]; then mkdir $TMP_FOLDER; fi
+    ping 8.8.8.8 -c 1 > $TMP_FOLDER/.result.tmp
+    isDown=$(cat $TMP_FOLDER/.result.tmp | grep "100% packet loss" | wc -l)
     return $isDown
 }
 

@@ -4,14 +4,17 @@
 #
 # References:
 #   https://www.shubhamdipt.com/blog/how-to-create-a-systemd-service-in-linux/
-#   https://stackoverflow.com/questions/35984151/how-to-create-new-system-service-by-ansible-playbook
-#
 # By gabrielrih <gabrielrih@gmail.com>
 #
 
 VERSION="1.1.0"
+
+# Installation configurations
 INSTALL_FOLDER="/opt/testerNlogger"
 SERVICE_TEMPLATE_FILENAME="testernlogger.service"
+
+# Do not change it
+FULL_INSTALL_FOLDER=$INSTALL_FOLDER"-"$VERSION
 
 # Is it root?
 if [ $(whoami) != root ]; then
@@ -21,10 +24,10 @@ fi
 
 # Copy script to install folder
 echo "[+] Copying files to install folder..."
-FULL_INSTALL_FOLDER=$INSTALL_FOLDER"-"$VERSION
 if [ ! -d $FULL_INSTALL_FOLDER ]; then mkdir $FULL_INSTALL_FOLDER; fi
 cp -R ./testerNlogger/run.sh $FULL_INSTALL_FOLDER
-cp -R ./service $FULL_INSTALL_FOLDER
+cp -R ./service/$SERVICE_TEMPLATE_FILENAME $FULL_INSTALL_FOLDER
+chmod 744 $FULL_INSTALL_FOLDER/run.sh
 
 # Symbolic link for the install folder
 echo "[+] Creating symbolic link for install folder..."
@@ -38,6 +41,8 @@ ln -s $INSTALL_FOLDER/service/$SERVICE_TEMPLATE_FILENAME /etc/systemd/system/$SE
 
 # Service
 echo "[+] Configuring service..."
+systemctl stop $SERVICE_TEMPLATE_FILENAME
+systemctl disable $SERVICE_TEMPLATE_FILENAME
 systemctl daemon-reload
 systemctl start $SERVICE_TEMPLATE_FILENAME
 systemctl enable $SERVICE_TEMPLATE_FILENAME

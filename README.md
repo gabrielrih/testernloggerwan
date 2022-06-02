@@ -4,6 +4,7 @@ The test connection works sending a ping packet to Google DNS server and if it f
 
 ## How to install it
 Here we have a example of how to install it in a Linux machine. Just pay attention to install the latest version.
+
 ``cd /tmp``
 
 ``wget https://github.com/gabrielrih/testerNloggerWAN/archive/refs/tags/1.1.0.tar.gz``

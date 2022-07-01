@@ -17,6 +17,16 @@ Here we have a example of how to install it in a Linux machine. Just pay attenti
 
 ``sudo ./install.sh``
 
+## Configuring the yml file (CallMeBot)
+This repo use a Python library each sends free WhatsApp message.
+To this works correctly you must edit the configuration file in /etc/.
+The yml file looks like this:
+
+```yml
+- phone: +555598741585
+  apikey: 152879
+```
+
 ## How to check the log file?
 ``
 tail -f /var/log/testernlogger/changeHistory.log

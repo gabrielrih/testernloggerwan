@@ -5,23 +5,9 @@
 # By gabrielrih <gabrielrih@gmail.com>
 #
 
-# Interval configurations
-INTERVAL_TO_TEST_CONNECTION_IN_SECONDS=60
-
-# Debugging and testing configurations
-IS_TO_SAVE_DETAIL_LOGS=false
-CLEAR_ALL_LOG_FILES_EVERY_START=false
-IS_TO_PRINT_LOG_IN_STDOUT=false
-
-# File and folders configurations
-LOG_FOLDER="/var/log/testerNlogger"
-LOG_FILENAME="connection.log" # in runtime this name is changed
-LOG_WHEN_CHANGE_FILENAME="changeHistory.log"
-TMP_FOLDER="/tmp/testerNlogger" # used for creating temporary files
-
-# Do not change it
-LOG_FULL_PATH=$LOG_FOLDER/$LOG_FILENAME
-LOG_ON_CHANGE_FULL_PATH=$LOG_FOLDER/$LOG_WHEN_CHANGE_FILENAME
+# Load configuration file (import all the variables)
+. config/testerNlogger.conf
+. config/callMeBotConfig.conf
 
 # Is it root?
 if [ $(whoami) != root ]; then
@@ -50,11 +36,23 @@ createLogContent() {
     logContent="$currentDate|$currentTime|$status|" # Format: date|time|status|
 }
 
-logWhenStatusChanged() {
+checkIfStatusChanged() {
     if [ ! $isDownLast ]; then isDownLast=2; fi # first execution. Force value two to print changed log
     if [ ! -f $LOG_ON_CHANGE_FULL_PATH ]; then echo "date|time|status|" >> $LOG_ON_CHANGE_FULL_PATH; fi # print header if log file doesn't exists
     if [ $isDown -ne $isDownLast ]; then echo $logContent >> $LOG_ON_CHANGE_FULL_PATH; fi # it saves the log when status changed
+    if [ $isDown -eq 0 ] && [ $isDownLast -eq 1 ]; then sendNotification; fi # when status changed from DOWN to UP
     isDownLast=$isDown # set current as last
+}
+
+# Using PYTHON INTEGRATION (CallMeBot)
+sendNotification() {
+    if [ $IS_TO_PRINT_LOG_IN_STDOUT == true ]; then echo "[!] Sending notification. Connection was recovered!"; fi
+    # Call Python to send WhatsApp message
+    sendNotificationResponse=$(python3 $SEND_NOTIFICATION_INTERFACE_FILENAME "$SEND_NOTIFICATION_CREDENTIAL_FILENAME" "$SEND_NOTIFICATION_MESSAGE_TO_BE_SENT")
+    # Records the result in a file
+    if [ ! -f $SEND_NOTIFICATION_LOG_FULL_PATH ]; then echo "dateTime|sent|message" >> $SEND_NOTIFICATION_LOG_FULL_PATH; fi # print header if sendNotification log file doesn't exists
+    currentDatetime=$currentDate"T"$currentTime
+    echo "$currentDatetime|$sendNotificationResponse" >> $SEND_NOTIFICATION_LOG_FULL_PATH
 }
 
 logEverything() {
@@ -81,7 +79,7 @@ do
     testConnection
     if [ ! -d $LOG_FOLDER ]; then mkdir $LOG_FOLDER; fi
     createLogContent
-    logWhenStatusChanged
+    checkIfStatusChanged
     if [ $IS_TO_SAVE_DETAIL_LOGS == true ]; then logEverything; fi
     if [ $IS_TO_PRINT_LOG_IN_STDOUT == true ]; then printInStdout; fi
     sleep $INTERVAL_TO_TEST_CONNECTION_IN_SECONDS

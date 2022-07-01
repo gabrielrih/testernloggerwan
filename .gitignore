@@ -1,1 +1,9 @@
+# Temporary file to save the ping result
 .result.tmp
+
+# External libraries
+libraries
+
+# CallMeBot credential file
+config/callMeBotCredential.yml
+config/callMeBotConfig.conf

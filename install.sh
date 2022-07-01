@@ -31,6 +31,7 @@ installation() {
     cp -R ./run.sh $FULL_INSTALL_FOLDER
     if [ ! -d "$FULL_INSTALL_FOLDER/config" ]; then mkdir "$FULL_INSTALL_FOLDER/config"; fi
     cp -R ./config/testerNlogger.conf $FULL_INSTALL_FOLDER/config/testerNlogger.conf
+    cp -R ./config/callMeBotConfig.conf $FULL_INSTALL_FOLDER/config/callMeBotConfig.conf # this file is modified next in this same script
     cp -R ./service/$SERVICE_TEMPLATE_FILENAME $FULL_INSTALL_FOLDER
     chmod 744 $FULL_INSTALL_FOLDER/run.sh
 
@@ -79,6 +80,10 @@ callMeBot() {
     echo "[+] Copying CallMeBot configuration file to '$CALLMEBOT_CONFIG_FOLDER'..."
     if [ ! -d $CALLMEBOT_CONFIG_FOLDER ]; then mkdir $CALLMEBOT_CONFIG_FOLDER; fi
     cp "$CALLMEBOT_TMP_FOLDER/callMeBot-$CALLMEBOT_VERSION/config/credentials-example.yml" "$CALLMEBOT_CONFIG_FOLDER/credentials.yml"
+
+    # Change callMeBotoConfig.conf to point for the right credential file
+    # FIX IT: Now this have a fixed value. Change it.
+    sudo sed -i 's/.\/config\/callMeBotCredential.yml/\/etc\/callMeBot\/credentials.yml/g' $FULL_INSTALL_FOLDER/config/callMeBotConfig.conf
 
     # Cleaning up
     echo "[+] Cleaning up CallMeBot temporary folder..."

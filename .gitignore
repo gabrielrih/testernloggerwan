@@ -6,4 +6,4 @@ libraries
 
 # CallMeBot credential file
 config/callMeBotCredential.yml
-config/callMeBotConfig.conf
+#config/callMeBotConfig.conf

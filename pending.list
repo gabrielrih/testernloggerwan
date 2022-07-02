@@ -1,9 +1,0 @@
-- install.sh
-Tem um FIX IT lá.
-
-- Configurar no install.sh para permitir perguntar se o arquivo de configuração pode ser substituído ou não
-Perguntar ao usuário
-
-- Melhorar o README.md
-
-- Temos um VERSION fixo no install.sh, porém isso não faz sentido. Pensar em uma forma melhor de controlar isso.

@@ -7,11 +7,11 @@ Here we have a example of how to install it in a Linux machine. Just pay attenti
 
 ``cd /tmp``
 
-``wget https://github.com/gabrielrih/testerNloggerWAN/archive/refs/tags/1.1.0.tar.gz``
+``wget https://github.com/gabrielrih/testerNloggerWAN/archive/refs/tags/1.2.0.tar.gz``
 
-``tar -xf 1.1.0.tar.gz``
+``tar -xf 1.2.0.tar.gz``
 
-``cd testerNlogger-1.1.0``
+``cd testerNlogger-1.2.0``
 
 ``sudo chmod 744 install.sh``
 

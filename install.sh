@@ -112,7 +112,7 @@ service() {
 
 installation
 installationLibraries
-#service
+service
 
 echo "[+] Everything installed!"
 

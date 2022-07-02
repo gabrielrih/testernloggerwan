@@ -1,14 +1,8 @@
-- Arrumar o instalador para baixar e configurar o sendNotification
+- install.sh
+Tem um FIX IT lá.
 
-
-
-
-
-- Adicionar arquivo de configuração
-    /etc/testernlogger/testernlogger.config
-    Criar isso no install.sh e tratar para que pegue os valores no run.sh a partir deste testernlogger.config
-
-- Adicionar opções de debug como parâmetros (que são precedentes as opções no arquivo de configuração)
+- Configurar no install.sh para permitir perguntar se o arquivo de configuração pode ser substituído ou não
+Perguntar ao usuário
 
 - Melhorar o README.md
 

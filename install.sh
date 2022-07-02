@@ -14,7 +14,7 @@ if [ $(whoami) != root ]; then
 fi
 
 # Repo version
-VERSION="1.1.1"
+VERSION="1.2.0"
 
 # Installation configurations
 INSTALL_FOLDER="/opt/testerNlogger"

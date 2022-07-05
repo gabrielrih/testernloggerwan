@@ -55,32 +55,42 @@ installationLibraries() {
 
 callMeBot() {
 
-    # Configurations
+    # Version to be installed
     CALLMEBOT_VERSION="0.0.4"
-    CALLMEBOT_TMP_FOLDER="/tmp/callMeBot"
-    CALLMEBOT_INSTALL_FOLDER="$LIBRARIES_INSTALL_FOLDER/callMeBot"
     
-    # Get config folder from user
-    DEFAULT_CALLMEBOT_CONFIG_FOLDER="/etc/callMeBot"
-    read -p "CALLMEBOT_CONFIG_FOLDER (default: $DEFAULT_CALLMEBOT_CONFIG_FOLDER): " USER_CALLMEBOT_CONFIG_FOLDER
-    if [ $USER_CALLMEBOT_CONFIG_FOLDER ]; then CALLMEBOT_CONFIG_FOLDER=$USER_CALLMEBOT_CONFIG_FOLDER; else CALLMEBOT_CONFIG_FOLDER=$DEFAULT_CALLMEBOT_CONFIG_FOLDER; fi
-
     # Download and unzip repo
     echo "[+] Downloading CallMeBot library..."
+    CALLMEBOT_TMP_FOLDER="/tmp/callMeBot"
     wget https://github.com/gabrielrih/callMeBot/archive/refs/tags/$CALLMEBOT_VERSION.tar.gz -P $CALLMEBOT_TMP_FOLDER
     tar -xzvf $CALLMEBOT_TMP_FOLDER/$CALLMEBOT_VERSION.tar.gz -C $CALLMEBOT_TMP_FOLDER
 
     # Copying library files to TesterNLogger installation folder
     echo "[+] Copying CallMeBot library files..."
+    CALLMEBOT_INSTALL_FOLDER="$LIBRARIES_INSTALL_FOLDER/callMeBot"
     if [ -d $CALLMEBOT_INSTALL_FOLDER ]; then rm -r $CALLMEBOT_INSTALL_FOLDER; fi
     cp -R "$CALLMEBOT_TMP_FOLDER/callMeBot-$CALLMEBOT_VERSION/callMeBot/" "$CALLMEBOT_INSTALL_FOLDER"
 
-    # Copying default config file
-    # FIX IT: Perguntar se quer substituir o arquivo atual
-    echo "[+] Copying CallMeBot configuration file to '$CALLMEBOT_CONFIG_FOLDER'..."
-    if [ ! -d $CALLMEBOT_CONFIG_FOLDER ]; then mkdir $CALLMEBOT_CONFIG_FOLDER; fi
-    cp "$CALLMEBOT_TMP_FOLDER/callMeBot-$CALLMEBOT_VERSION/config/credentials-example.yml" "$CALLMEBOT_CONFIG_FOLDER/credentials.yml"
+    # Get config folder from user
+    DEFAULT_CALLMEBOT_CONFIG_FOLDER="/etc/callMeBot"
+    read -p "CALLMEBOT_CONFIG_FOLDER (default: $DEFAULT_CALLMEBOT_CONFIG_FOLDER): " USER_CALLMEBOT_CONFIG_FOLDER
+    if [ $USER_CALLMEBOT_CONFIG_FOLDER ]; then CALLMEBOT_CONFIG_FOLDER=$USER_CALLMEBOT_CONFIG_FOLDER; else CALLMEBOT_CONFIG_FOLDER=$DEFAULT_CALLMEBOT_CONFIG_FOLDER; fi
 
+    # Copying default config file
+    if [ ! -d $CALLMEBOT_CONFIG_FOLDER ]; then mkdir $CALLMEBOT_CONFIG_FOLDER; fi
+    CALLMEBOT_DESTINATION_CONFIG_FILENAME="credentials.yml"
+    CALLMEBOT_FULL_CONFIG_FILENAME=$CALLMEBOT_CONFIG_FOLDER/$CALLMEBOT_DESTINATION_CONFIG_FILENAME
+    if [ -f $CALLMEBOT_FULL_CONFIG_FILENAME ] # If file exists the user can decide if replace it or not
+    then
+        read -p "File '$CALLMEBOT_FULL_CONFIG_FILENAME' already exists. Do you want to replace it? (Default: N) " answer
+        case $answer in
+            Y | y | YES | yes ) IS_TO_REPLACE_IT=true;;
+            * ) IS_TO_REPLACE_IT=false;;
+        esac
+    else
+        IS_TO_REPLACE_IT=true # force true for copying file    
+    fi
+    if [[ $IS_TO_REPLACE_IT == true ]]; then echo "[+] Copying CallMeBot configuration file to '$CALLMEBOT_CONFIG_FOLDER'..." && cp "$CALLMEBOT_TMP_FOLDER/callMeBot-$CALLMEBOT_VERSION/config/credentials-example.yml" "$CALLMEBOT_FULL_CONFIG_FILENAME"; fi
+    
     # Change callMeBotoConfig.conf to point for the right credential file
     # FIX IT: Now this have a fixed value. Change it.
     sudo sed -i 's/.\/config\/callMeBotCredential.yml/\/etc\/callMeBot\/credentials.yml/g' $FULL_INSTALL_FOLDER/config/callMeBotConfig.conf
@@ -112,7 +122,7 @@ service() {
 
 installation
 installationLibraries
-service
+#service
 
 echo "[+] Everything installed!"
 

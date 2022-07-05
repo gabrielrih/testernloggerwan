@@ -92,8 +92,8 @@ callMeBot() {
     if [[ $IS_TO_REPLACE_IT == true ]]; then echo "[+] Copying CallMeBot configuration file to '$CALLMEBOT_CONFIG_FOLDER'..." && cp "$CALLMEBOT_TMP_FOLDER/callMeBot-$CALLMEBOT_VERSION/config/credentials-example.yml" "$CALLMEBOT_FULL_CONFIG_FILENAME"; fi
     
     # Change callMeBotoConfig.conf to point for the right credential file
-    # FIX IT: Now this have a fixed value. Change it.
-    sudo sed -i 's/.\/config\/callMeBotCredential.yml/\/etc\/callMeBot\/credentials.yml/g' $FULL_INSTALL_FOLDER/config/callMeBotConfig.conf
+    REPLACED_VALUE=$(echo $CALLMEBOT_FULL_CONFIG_FILENAME | sed -e 's/\//\\\//g')
+    sudo sed -i "s/.\/config\/callMeBotCredential.yml/${REPLACED_VALUE}/g" $FULL_INSTALL_FOLDER/config/callMeBotConfig.conf
 
     # Cleaning up
     echo "[+] Cleaning up CallMeBot temporary folder..."
@@ -122,8 +122,8 @@ service() {
 
 installation
 installationLibraries
-#service
+service
 
-echo "[+] Everything installed!"
+echo "[+] Installed!"
 
 exit 0

@@ -1,0 +1,5 @@
+2022-07-05 17:54:01,320 DEBUG Harmless debug Message
+2022-07-05 17:54:01,321 INFO Just an information
+2022-07-05 17:54:01,321 WARNING Its a Warning
+2022-07-05 17:54:01,321 ERROR Did you try to divide by zero
+2022-07-05 17:54:01,322 CRITICAL Internet is down

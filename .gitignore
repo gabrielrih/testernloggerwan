@@ -7,3 +7,8 @@ libraries
 # CallMeBot credential file
 config/callMeBotCredential.yml
 #config/callMeBotConfig.conf
+
+# Python
+test_py
+__pycache__
+log

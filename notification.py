@@ -17,7 +17,7 @@ def send_free_notification(message, phoneNumber, apiKey, enableDebugMode = False
             isSuccess = False
         return isSuccess, response
     else: # It simulates success without actually send the notification
-        return 200, "Sucess!"
+        return True, "Sucess!"
 
 
 def _callAPI(apiKey, phoneNumber, message):

@@ -32,17 +32,24 @@ def main():
     isUpLast = True # Pretends the first connection test was UP
     while (True):
         isUp, errorReason = test_connection()
-        connectionLog.debug("Connection status is up? " + str(isUp) + " - Last connection status was up? " + str(isUpLast))
         if isUpLast != isUp: # Internet status was changed
             if isUp:
+                timeWhenItTurnsUp = time.time()
                 connectionLog.warning("Internet connection is UP!")
                 if enableNotification == 'True':
-                    send_notification(phoneNumber, apiKey, enableDebugModeInNotification, timeWhenItWasDown)
+                    connectionLog.info("Sending notification!")
+                    customMessage = custom_notification_message(lastErrorReason, timeWhenItWasDown, timeWhenItTurnsUp)
+                    wasSent, response = send_free_notification(customMessage, phoneNumber, apiKey, enableDebugModeInNotification)
+                    connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
+                    if wasSent == 'False':
+                        connectionLog.critical("Sending notification error: " + str(response))
             else:
                 timeWhenItWasDown = time.time()
+                lastErrorReason = errorReason
                 connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
         isUpLast = isUp
         time.sleep(intervalToTest)
+
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='TesterNLogger WAN connection. It tests the connection and log it every time the connection status changed.')
@@ -51,6 +58,7 @@ def get_arguments():
     configFileName = args.config
     return configFileName
 
+
 def parse_log_configs(config):
     logDefaultFolder = config['LOG']['DEFAULT_FOLDER']
     logDefaultFilename = config['LOG']['DEFAULT_FILENAME']
@@ -58,9 +66,11 @@ def parse_log_configs(config):
     enableDebugMode = config['LOG']['ENABLE_DEBUG_MODE']
     return logDefaultFolder, logDefaultFilename, clearLogFilesOnStart, enableDebugMode
 
+
 def parse_connection_configs(config):
     intervalToTest = int(config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
     return intervalToTest
+
 
 def parse_notification_configs(config):
     enableNotification = config['NOTIFICATION']['ENABLE_NOTIFICATION']
@@ -69,11 +79,18 @@ def parse_notification_configs(config):
     enableDebugModeInNotification = config['NOTIFICATION']['ENABLE_DEBUG_MODE']
     return enableNotification, phoneNumber, apiKey, enableDebugModeInNotification
 
-def send_notification(phoneNumber, apiKey, enableDebugModeInNotification, timeWhenItWasDown):
-    timeNow = time.time()
-    downtime = timeWhenItWasDown - timeNow
-    message = "TEST: Internet connection was down but now it is UP again. Downtime: " + downtime + " seconds"
-    send_free_notification(message, phoneNumber, apiKey, enableDebugModeInNotification)
+
+def custom_notification_message(errorMessage, timeWhenItWasDown, timeWhenItTurnsUp):
+    errorMessage = str(errorMessage)
+    downtime = timeWhenItTurnsUp - timeWhenItWasDown
+    customMessage = "TEST: "
+    customMessage += "Internet connection was down but now it is UP again. "
+    customMessage += "Downtime: " + str(downtime) + " seconds. "
+    if errorMessage:
+        customMessage += "\n"
+        customMessage += "Error:" + str(errorMessage)
+    return customMessage
+
 
 if __name__ == '__main__':
     main()

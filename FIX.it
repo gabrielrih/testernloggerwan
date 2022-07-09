@@ -1,0 +1,8 @@
+NOTIFICATION
+- Array of phone numbers
+
+CONFIGS
+- Turns some configuration in config file optional. How to do it?
+
+GENERAL
+- Add comments on methods and files

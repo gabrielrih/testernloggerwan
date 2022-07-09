@@ -8,7 +8,7 @@ TIME_OUT = 10
 
 def test_connection():
     try:
-        response = urllib.request.urlopen(FIRST_WEBSITE_TO_TEST, timeout = TIME_OUT)
+        response = urllib.request.urlopen(FIRST_WEBSITE_TO_TEST, timeout=TIME_OUT)
     except timeout:
         return False, "Request has reached the timeout!"
     except HTTPError as e:

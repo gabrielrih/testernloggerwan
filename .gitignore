@@ -1,14 +1,11 @@
-# Temporary file to save the ping result
-.result.tmp
-
-# External libraries
-libraries
-
-# CallMeBot credential file
-config/callMeBotCredential.yml
-#config/callMeBotConfig.conf
-
 # Python
-test_py
 __pycache__
+
+# Log folder
 log
+
+# Configs
+config/config.ini
+
+# Others
+FIX.it

@@ -4,5 +4,9 @@ NOTIFICATION
 CONFIGS
 - Turns some configuration in config file optional. How to do it?
 
+INSTALLATION
+- Create the installation script and test it.
+
 GENERAL
 - Add comments on methods and files
+- Create the README file

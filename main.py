@@ -3,9 +3,9 @@
 # <gabrielrih>
 import time
 import sys
-import argparse
 
 # Private libraries
+from argument import get_arguments
 from config import read_config
 from connection import test_connection
 from logger import *
@@ -49,14 +49,6 @@ def main():
                 connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
         isUpLast = isUp
         time.sleep(intervalToTest)
-
-
-def get_arguments():
-    parser = argparse.ArgumentParser(description='TesterNLogger WAN connection. It tests the connection and log it every time the connection status changed.')
-    parser.add_argument('--config', '-c', help='Configuration file', required=True)
-    args = parser.parse_args()
-    configFileName = args.config
-    return configFileName
 
 
 def parse_log_configs(config):

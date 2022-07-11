@@ -10,7 +10,7 @@ def start_logger(folder, filename, enableDebugMode = False):
                         format='%(asctime)s %(levelname)s %(message)s',
                         filemode='a')
     connectionLog = logging.getLogger()
-    if enableDebugMode == 'True':
+    if enableDebugMode == True:
         connectionLog.setLevel(logging.DEBUG)
     else:
         connectionLog.setLevel(logging.INFO)

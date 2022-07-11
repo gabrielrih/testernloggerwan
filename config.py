@@ -28,10 +28,6 @@ class Config:
             self.logClearFilesOnStart = self.config['LOG']['CLEAR_ALL_LOG_FILES_ON_START']
         except:
             self.logClearFilesOnStart = False
-        try:
-            self.logDebugEnabled = self.config['LOG']['ENABLE_DEBUG_MODE']
-        except:
-            self.logDebugEnabled = False
         return self
 
     def _get_connection_configs(self):

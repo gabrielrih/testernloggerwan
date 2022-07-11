@@ -14,7 +14,7 @@ from notification import send_free_notification
 def main():
 
     # Get configs
-    configFileName = get_arguments()
+    configFileName, debugEnabled = get_arguments()
     if not exists(configFileName):
         raise Exception("ERROR: Config file wasn't found! Check if the config file exists and if it has the right name.")
     configs = config.Config(configFileName)
@@ -24,7 +24,7 @@ def main():
     # Start logger and cleaning up if needed
     if configs.logClearFilesOnStart == 'True':
         clear_logs(configs.logDefaultFolder, configs.logDefaultFilename)
-    connectionLog = start_logger(configs.logDefaultFolder, configs.logDefaultFilename, configs.logDebugEnabled)
+    connectionLog = start_logger(configs.logDefaultFolder, configs.logDefaultFilename, debugEnabled)
     connectionLog.info("Starting TesterNLogger process...")
 
     # Connection check
@@ -32,6 +32,7 @@ def main():
     isUpLast = True # Pretends the first connection test was UP
     while (True):
         isUp, errorReason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
+        connectionLog.debug("Testing connection! isUp: " + str(isUp) + " isUpLast: " + str(isUpLast))
         if isUpLast != isUp: # Internet status was changed
             if isUp:
                 timeWhenItTurnsUp = time.time()
@@ -67,8 +68,7 @@ def get_downtime(timeWhenItWasDown, timeWhenItTurnsUp):
 
 def custom_notification_message(errorMessage, downtime, unit):
     errorMessage = str(errorMessage)
-    customMessage = "TEST: "
-    customMessage += "Internet connection was down but now it is UP again. "
+    customMessage = "Internet connection was down but now it is UP again. "
     customMessage += "Downtime: " + str(downtime) + ' ' + unit + '.'
     if errorMessage:
         customMessage += "\n"

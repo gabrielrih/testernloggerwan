@@ -7,7 +7,7 @@ import sys
 # Private libraries
 from argument import get_arguments
 from config import read_config
-from connection import test_connection
+from connection import *
 from logger import *
 from notification import send_free_notification
 
@@ -27,18 +27,20 @@ def main():
     connectionLog.info("Starting TesterNLogger process...")
 
     # Connection check
-    intervalToTest = parse_connection_configs(config)
+    intervalForTesting, dnsServerIP, dnsServerPort, connectionTimeOut = parse_connection_configs(config)
+    connectionLog.debug("DNS Server: " + str(dnsServerIP) + ":" + str(dnsServerPort) + " Connection time out: " + str(connectionTimeOut))
     enableNotification, phoneNumber, apiKey, enableDebugModeInNotification = parse_notification_configs(config)
     isUpLast = True # Pretends the first connection test was UP
     while (True):
-        isUp, errorReason = test_connection()
+        isUp, errorReason = test_connection_socket(dnsServerIP, dnsServerPort, connectionTimeOut)
         if isUpLast != isUp: # Internet status was changed
             if isUp:
                 timeWhenItTurnsUp = time.time()
-                connectionLog.warning("Internet connection is UP!")
+                downtime, unit = get_downtime(timeWhenItWasDown, timeWhenItTurnsUp)
+                connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' ' + unit + '.')
                 if enableNotification == 'True':
                     connectionLog.info("Sending notification!")
-                    customMessage = custom_notification_message(lastErrorReason, timeWhenItWasDown, timeWhenItTurnsUp)
+                    customMessage = custom_notification_message(lastErrorReason, downtime, unit)
                     wasSent, response = send_free_notification(customMessage, phoneNumber, apiKey, enableDebugModeInNotification)
                     connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
                     if wasSent == 'False':
@@ -48,7 +50,7 @@ def main():
                 lastErrorReason = errorReason
                 connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
         isUpLast = isUp
-        time.sleep(intervalToTest)
+        time.sleep(intervalForTesting)
 
 
 def parse_log_configs(config):
@@ -60,8 +62,11 @@ def parse_log_configs(config):
 
 
 def parse_connection_configs(config):
-    intervalToTest = int(config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
-    return intervalToTest
+    intervalForTesting = int(config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
+    dnsServerIP = config['CONNECTION']['DNS_SERVER_IP']
+    dnsServerPort = int(config['CONNECTION']['DNS_SERVER_PORT'])
+    connectionTimeOut = int(config['CONNECTION']['TIME_OUT'])
+    return intervalForTesting, dnsServerIP, dnsServerPort, connectionTimeOut
 
 
 def parse_notification_configs(config):
@@ -72,12 +77,28 @@ def parse_notification_configs(config):
     return enableNotification, phoneNumber, apiKey, enableDebugModeInNotification
 
 
-def custom_notification_message(errorMessage, timeWhenItWasDown, timeWhenItTurnsUp):
-    errorMessage = str(errorMessage)
+"""
+    Returns downtime rounded in two decimals.
+    Plus, it returns the unit of measure (seconds, minutes or hours)
+"""
+def get_downtime(timeWhenItWasDown, timeWhenItTurnsUp):
     downtime = timeWhenItTurnsUp - timeWhenItWasDown
+    if downtime >= 3600:
+        downtime = downtime / 60 / 60 # Seconds to hours
+        unit = 'hours'
+    elif downtime >= 60:
+        downtime = downtime / 60 # Seconds to minutes
+        unit = 'minutes'
+    else:
+        unit = 'seconds'
+    return round(downtime, 2), unit
+
+
+def custom_notification_message(errorMessage, downtime, unit):
+    errorMessage = str(errorMessage)
     customMessage = "TEST: "
     customMessage += "Internet connection was down but now it is UP again. "
-    customMessage += "Downtime: " + str(downtime) + " seconds. "
+    customMessage += "Downtime: " + str(downtime) + ' ' + unit + '.'
     if errorMessage:
         customMessage += "\n"
         customMessage += "Error:" + str(errorMessage)

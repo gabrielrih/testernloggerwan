@@ -2,11 +2,11 @@
 # It tests and it logs the wan connection status.
 # <gabrielrih>
 import time
-import sys
+from os.path import exists
 
 # Private libraries
 from argument import get_arguments
-from config import read_config
+import config
 from connection import *
 from logger import *
 from notification import send_free_notification
@@ -15,33 +15,32 @@ def main():
 
     # Get configs
     configFileName = get_arguments()
-    config, error = read_config(configFileName)
-    if error:
-        sys.exit(error)
-
+    if not exists(configFileName):
+        raise Exception("ERROR: Config file wasn't found! Check if the config file exists and if it has the right name.")
+    configs = config.Config(configFileName)
+    configs.read_configs()
+    configs.get_configs()
+    
     # Start logger and cleaning up if needed
-    logDefaultFolder, logDefaultFilename, clearLogFilesOnStart, enableDebugMode = parse_log_configs(config)
-    if clearLogFilesOnStart == 'True':
-        clear_logs(logDefaultFolder, logDefaultFilename)
-    connectionLog = start_logger(logDefaultFolder, logDefaultFilename, enableDebugMode)
+    if configs.logClearFilesOnStart == 'True':
+        clear_logs(configs.logDefaultFolder, configs.logDefaultFilename)
+    connectionLog = start_logger(configs.logDefaultFolder, configs.logDefaultFilename, configs.logDebugEnabled)
     connectionLog.info("Starting TesterNLogger process...")
 
     # Connection check
-    intervalForTesting, dnsServerIP, dnsServerPort, connectionTimeOut = parse_connection_configs(config)
-    connectionLog.info("Connection configs: IP " + str(dnsServerIP) + " Port " + str(dnsServerPort) + " Timeout " + str(connectionTimeOut))
-    enableNotification, phoneNumber, apiKey, enableDebugModeInNotification = parse_notification_configs(config)
+    connectionLog.info("Connection configs: IP " + str(configs.connDNSServerIP) + " Port " + str(configs.conDNSServerPort) + " Timeout " + str(configs.connTimeOut))
     isUpLast = True # Pretends the first connection test was UP
     while (True):
-        isUp, errorReason = test_connection_socket(dnsServerIP, dnsServerPort, connectionTimeOut)
+        isUp, errorReason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
         if isUpLast != isUp: # Internet status was changed
             if isUp:
                 timeWhenItTurnsUp = time.time()
                 downtime, unit = get_downtime(timeWhenItWasDown, timeWhenItTurnsUp)
                 connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' ' + unit + '.')
-                if enableNotification == 'True':
+                if configs.notificationEnabled == 'True':
                     connectionLog.info("Sending notification!")
                     customMessage = custom_notification_message(lastErrorReason, downtime, unit)
-                    wasSent, response = send_free_notification(customMessage, phoneNumber, apiKey, enableDebugModeInNotification)
+                    wasSent, response = send_free_notification(customMessage, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationDebugEnabled)
                     connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
                     if wasSent == 'False':
                         connectionLog.critical("Sending notification error: " + str(response))
@@ -50,37 +49,9 @@ def main():
                 lastErrorReason = errorReason
                 connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
         isUpLast = isUp
-        time.sleep(intervalForTesting)
+        time.sleep(configs.connInterval)
 
 
-def parse_log_configs(config):
-    logDefaultFolder = config['LOG']['DEFAULT_FOLDER']
-    logDefaultFilename = config['LOG']['DEFAULT_FILENAME']
-    clearLogFilesOnStart = config['LOG']['CLEAR_ALL_LOG_FILES_ON_START']
-    enableDebugMode = config['LOG']['ENABLE_DEBUG_MODE']
-    return logDefaultFolder, logDefaultFilename, clearLogFilesOnStart, enableDebugMode
-
-
-def parse_connection_configs(config):
-    intervalForTesting = int(config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
-    dnsServerIP = config['CONNECTION']['DNS_SERVER_IP']
-    dnsServerPort = int(config['CONNECTION']['DNS_SERVER_PORT'])
-    connectionTimeOut = int(config['CONNECTION']['TIME_OUT'])
-    return intervalForTesting, dnsServerIP, dnsServerPort, connectionTimeOut
-
-
-def parse_notification_configs(config):
-    enableNotification = config['NOTIFICATION']['ENABLE_NOTIFICATION']
-    phoneNumber = config['NOTIFICATION']['PHONE_NUMBER']
-    apiKey = config['NOTIFICATION']['API_KEY']
-    enableDebugModeInNotification = config['NOTIFICATION']['ENABLE_DEBUG_MODE']
-    return enableNotification, phoneNumber, apiKey, enableDebugModeInNotification
-
-
-"""
-    Returns downtime rounded in two decimals.
-    Plus, it returns the unit of measure (seconds, minutes or hours)
-"""
 def get_downtime(timeWhenItWasDown, timeWhenItTurnsUp):
     downtime = timeWhenItTurnsUp - timeWhenItWasDown
     if downtime >= 3600:

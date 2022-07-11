@@ -2,11 +2,6 @@
 PARAMETERS
 - Receive debug mode when you call the main.py
 
-CONFIGS
-- Bring the configuration parse to the config.py file. Use class?
-- Turns some configuration in config file optional. How to do it?
-
-
 
 - PHASE 2
 INSTALLATION

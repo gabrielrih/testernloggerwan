@@ -28,7 +28,7 @@ def main():
 
     # Connection check
     intervalForTesting, dnsServerIP, dnsServerPort, connectionTimeOut = parse_connection_configs(config)
-    connectionLog.debug("DNS Server: " + str(dnsServerIP) + ":" + str(dnsServerPort) + " Connection time out: " + str(connectionTimeOut))
+    connectionLog.info("Connection configs: IP " + str(dnsServerIP) + " Port " + str(dnsServerPort) + " Timeout " + str(connectionTimeOut))
     enableNotification, phoneNumber, apiKey, enableDebugModeInNotification = parse_notification_configs(config)
     isUpLast = True # Pretends the first connection test was UP
     while (True):

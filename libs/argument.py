@@ -1,5 +1,9 @@
+"""
+    It works with command line arguments.
+    Reference: https://docs.python.org/3/library/argparse.html
+    <gabrielrih>
+"""
 import argparse
-
 
 def get_arguments():
     parser = argparse.ArgumentParser(description='TesterNLogger WAN connection. It tests the connection and log it every time the connection status changed.')

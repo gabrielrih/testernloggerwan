@@ -1,16 +1,18 @@
-# Reference: https://docs.python.org/3/library/configparser.html
+"""
+    Class for get the configurations based on a file.
+    It returns an error if the file doesn't exist or if it doesn't have the required configurations.
+    Reference: https://docs.python.org/3/library/configparser.html
+    <gabrielrih>
+"""
 import configparser
 
 class Config:
     def __init__(self, path):
         self.path = path
 
-    def read_configs(self):
+    def get_configs(self):
         self.config = configparser.ConfigParser()
         self.config.read(self.path)
-        return self
-
-    def get_configs(self):
         self._get_log_configs()
         self._get_connection_configs()
         self._get_notification_configs()
@@ -35,7 +37,7 @@ class Config:
         try:
             self.connInterval = int(self.config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
         except:
-            self.connInterval = 10
+            self.connInterval = 15
         try:
             self.connDNSServerIP = self.config['CONNECTION']['DNS_SERVER_IP']
         except:
@@ -47,7 +49,7 @@ class Config:
         try:
             self.connTimeOut = int(self.config['CONNECTION']['TIME_OUT'])
         except:
-            self.connTimeOut = 5
+            self.connTimeOut = 10
         return self
 
     def _get_notification_configs(self):
@@ -66,7 +68,7 @@ class Config:
             self.notificationApiKey = ''
         # Optional
         try:
-            self.notificationDebugEnabled = self.config['NOTIFICATION']['ENABLE_DEBUG_MODE']
+            self.notificationFakeModeEnabled = self.config['NOTIFICATION']['ENABLE_FAKE_MODE']
         except:
-            self.notificationDebugEnabled = False
+            self.notificationFakeModeEnabled = False
         return self

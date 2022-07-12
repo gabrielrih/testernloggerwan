@@ -4,5 +4,8 @@ __pycache__
 # Log folder
 log
 
-# Configs
+# Configs for dev
 config/config.ini
+
+# Others
+FIX.it

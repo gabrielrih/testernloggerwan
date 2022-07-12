@@ -1,15 +1,17 @@
-# Tester N Logger
-# It tests and it logs the wan connection status.
-# <gabrielrih>
+"""
+    Tester N Logger
+    It tests and it logs the wan connection status.
+    <gabrielrih>
+"""
 import time
 from os.path import exists
 
 # Private libraries
-from argument import get_arguments
-import config
-from connection import *
-from logger import *
-from notification import send_free_notification
+from libs.argument import get_arguments
+import libs.config as config
+from libs.connection import *
+from libs.logger import *
+from libs.notification import send_free_notification
 
 def main():
 
@@ -18,7 +20,6 @@ def main():
     if not exists(configFileName):
         raise Exception("ERROR: Config file wasn't found! Check if the config file exists and if it has the right name.")
     configs = config.Config(configFileName)
-    configs.read_configs()
     configs.get_configs()
     
     # Start logger and cleaning up if needed
@@ -26,6 +27,7 @@ def main():
         clear_logs(configs.logDefaultFolder, configs.logDefaultFilename)
     connectionLog = start_logger(configs.logDefaultFolder, configs.logDefaultFilename, debugEnabled)
     connectionLog.info("Starting TesterNLogger process...")
+    connectionLog.info("Testing the WAN connection every " + str(configs.connInterval) + " seconds.")
 
     # Connection check
     connectionLog.info("Connection configs: IP " + str(configs.connDNSServerIP) + " Port " + str(configs.conDNSServerPort) + " Timeout " + str(configs.connTimeOut))
@@ -41,7 +43,7 @@ def main():
                 if configs.notificationEnabled == 'True':
                     connectionLog.info("Sending notification!")
                     customMessage = custom_notification_message(lastErrorReason, downtime, unit)
-                    wasSent, response = send_free_notification(customMessage, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationDebugEnabled)
+                    wasSent, response = send_free_notification(customMessage, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
                     connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
                     if wasSent == 'False':
                         connectionLog.critical("Sending notification error: " + str(response))
@@ -51,7 +53,6 @@ def main():
                 connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
         isUpLast = isUp
         time.sleep(configs.connInterval)
-
 
 def get_downtime(timeWhenItWasDown, timeWhenItTurnsUp):
     downtime = timeWhenItTurnsUp - timeWhenItWasDown
@@ -65,7 +66,6 @@ def get_downtime(timeWhenItWasDown, timeWhenItTurnsUp):
         unit = 'seconds'
     return round(downtime, 2), unit
 
-
 def custom_notification_message(errorMessage, downtime, unit):
     errorMessage = str(errorMessage)
     customMessage = "Internet connection was down but now it is UP again. "
@@ -74,7 +74,6 @@ def custom_notification_message(errorMessage, downtime, unit):
         customMessage += "\n"
         customMessage += "Error:" + str(errorMessage)
     return customMessage
-
 
 if __name__ == '__main__':
     main()

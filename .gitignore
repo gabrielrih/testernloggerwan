@@ -1,7 +1,7 @@
-# Python
+# Python temporary files
 __pycache__
 
-# Log folder
+# Logs
 log
 
 # Configs for dev

@@ -52,7 +52,7 @@ config_file_handler() {
     CONFIG_FILE_DESTINATION_FULL_NAME=$CONFIG_FOLDER/config.ini
     if [ -f $CONFIG_FILE_DESTINATION_FULL_NAME ] # config file already exists
     then
-        read -p "File '$CONFIG_FILE_DESTINATION_FULL_NAME' already exists. Do you want to replace it? (Default: N) " answer
+        read -p "[?] File '$CONFIG_FILE_DESTINATION_FULL_NAME' already exists. Do you want to replace it? (Default: N) " answer
         case $answer in
             Y | y | YES | yes ) IS_TO_REPLACE_IT=true;;
             * ) IS_TO_REPLACE_IT=false;;
@@ -110,10 +110,11 @@ service() {
     # Stopping and disable service (if it was already created earlier)
     # FIX IT: Check if the service exists
     echo "[+] Removing service..."
-    serviceExists = $(systemctl list-units --full -all | grep "$SERVICE_TEMPLATE_FILENAME" | wc -l)
-    if [ $serviceExists -eq 1]; then # the service already exists, so stop and disable it
+    serviceExists=$(systemctl list-units --full -all | grep "$SERVICE_TEMPLATE_FILENAME" | wc -l)
+    if [ $serviceExists -eq 1 ]; then # the service already exists, so stop and disable it
         systemctl stop $SERVICE_TEMPLATE_FILENAME
         systemctl disable $SERVICE_TEMPLATE_FILENAME
+        systemctl daemon-reload
     fi
 
     # Symbolic link for the service

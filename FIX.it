@@ -1,7 +1,6 @@
 INSTALL
 - Ask if the configuration file must be changed or not
     This is DONE. Test needed.
-- Service: Test if service already exists before trying to remove it
 
 OTHERS
 - Create the README file

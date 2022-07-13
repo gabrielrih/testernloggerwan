@@ -1,0 +1,11 @@
+[Unit]
+Description=It tests the WAN connection
+
+[Service]
+User=root
+WorkingDirectory=/opt/testerNlogger
+ExecStart=python3 /opt/testerNlogger/testerNlogger.py --config /etc/testerNlogger/config.ini
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

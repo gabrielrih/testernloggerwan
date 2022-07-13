@@ -1,7 +1,7 @@
-- PHASE 2
-- Create the installation script and test it.
-- Create the README file
+INSTALL
+- Ask if the configuration file must be changed or not
+    This is DONE. Test needed.
+- Service: Test if service already exists before trying to remove it
 
-- PHASE 3
-Create a log file to record just the downtime registers.
-Evaluate the structure needed.
+OTHERS
+- Create the README file

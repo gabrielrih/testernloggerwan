@@ -10,8 +10,17 @@ if [ $(whoami) != root ]; then
     exit 1
 fi
 
-rm -r /var/log/testerNlogger
-rm -r /etc/testerNlogger
-rm -r /opt/testerNlogger
-rm /opt/testerNlogger
-rm -r /opt/testerNlogger*
+# Configurations
+APPLICATION_NAME="testerNlogger"
+SERVICE_TEMPLATE_FILENAME="testernlogger.service"
+
+# Remove files
+rm -r /var/log/$APPLICATION_NAME
+rm -r /etc/$APPLICATION_NAME
+rm -r /opt/$APPLICATION_NAME
+rm /opt/$APPLICATION_NAME
+rm -r /opt/$APPLICATION_NAME*
+
+# Remove service
+systemctl stop $SERVICE_TEMPLATE_FILENAME
+systemctl disable $SERVICE_TEMPLATE_FILENAME

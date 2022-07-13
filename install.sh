@@ -48,10 +48,24 @@ config_file_handler() {
     # Set full path for config folder
     CONFIG_FOLDER="$CONFIG_FOLDER/$APPLICATION_NAME"
 
-    # Copying configuration file
-    echo "[+] Copying config file to $CONFIG_FOLDER"
-    if [ ! -d $CONFIG_FOLDER ]; then mkdir -p $CONFIG_FOLDER; fi
-    cp ./config/config-example.ini $CONFIG_FOLDER/config.ini
+    # If config file exists, ask if user wants to replace it
+    CONFIG_FILE_DESTINATION_FULL_NAME=$CONFIG_FOLDER/config.ini
+    if [ -f $CONFIG_FILE_DESTINATION_FULL_NAME ] # config file already exists
+    then
+        read -p "File '$CONFIG_FILE_DESTINATION_FULL_NAME' already exists. Do you want to replace it? (Default: N) " answer
+        case $answer in
+            Y | y | YES | yes ) IS_TO_REPLACE_IT=true;;
+            * ) IS_TO_REPLACE_IT=false;;
+        esac
+    else # force copy when config file doesn't exists
+        IS_TO_REPLACE_IT=true
+    fi
+    if [[ $IS_TO_REPLACE_IT == true ]]; then
+        # Copying configuration file
+        echo "[+] Copying config file to $CONFIG_FOLDER"
+        if [ ! -d $CONFIG_FOLDER ]; then mkdir -p $CONFIG_FOLDER; fi
+        cp ./config/config-example.ini $CONFIG_FILE_DESTINATION_FULL_NAME
+    fi
 }
 
 log_handler() {
@@ -96,8 +110,11 @@ service() {
     # Stopping and disable service (if it was already created earlier)
     # FIX IT: Check if the service exists
     echo "[+] Removing service..."
-    systemctl stop $SERVICE_TEMPLATE_FILENAME
-    systemctl disable $SERVICE_TEMPLATE_FILENAME
+    serviceExists = $(systemctl list-units --full -all | grep "$SERVICE_TEMPLATE_FILENAME" | wc -l)
+    if [ $serviceExists -eq 1]; then # the service already exists, so stop and disable it
+        systemctl stop $SERVICE_TEMPLATE_FILENAME
+        systemctl disable $SERVICE_TEMPLATE_FILENAME
+    fi
 
     # Symbolic link for the service
     echo "[+] Creating symbolic link for the service..."

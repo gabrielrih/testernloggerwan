@@ -13,6 +13,11 @@ fi
 #Configurations
 APPLICATION_NAME="testerNlogger"
 
+install_requirements() {
+    echo "[+] Installing Python requirements"
+    pip install -r requirements.txt
+}
+
 py_files_handler() {
 
     # Get destination folder for py files
@@ -131,6 +136,7 @@ service() {
 }
 
 echo "Starting TesterNLogger instalation..."
+install_requirements
 py_files_handler
 config_file_handler
 log_handler

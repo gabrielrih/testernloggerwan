@@ -8,10 +8,10 @@ from os.path import exists
 
 # Private libraries
 from libs.argument import get_arguments
-import libs.config as config
 from libs.connection import *
 from libs.logger import *
 from libs.notification import send_free_notification
+import libs.config as config
 
 def main():
 
@@ -35,22 +35,22 @@ def main():
     while (True):
         isUp, errorReason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
         connectionLog.debug("Testing connection! isUp: " + str(isUp) + " isUpLast: " + str(isUpLast))
-        if isUpLast != isUp: # Internet status was changed
-            if isUp:
-                timeWhenItTurnsUp = time.time()
-                downtime, unit = get_downtime(timeWhenItWasDown, timeWhenItTurnsUp)
-                connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' ' + unit + '.')
-                if configs.notificationEnabled == 'True':
-                    connectionLog.info("Sending notification!")
-                    customMessage = custom_notification_message(lastErrorReason, downtime, unit)
-                    wasSent, response = send_free_notification(customMessage, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
-                    connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
-                    if wasSent == 'False':
-                        connectionLog.critical("Sending notification error: " + str(response))
-            else:
-                timeWhenItWasDown = time.time()
-                lastErrorReason = errorReason
-                connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
+        if isUpLast == isUp: # Connection status hasn't changed
+            continue
+        if isUp:
+            timeWhenItTurnsUp = time.time()
+            downtime, unit = get_downtime(timeWhenItWasDown, timeWhenItTurnsUp)
+            connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' ' + unit + '.')
+            if configs.notificationEnabled == 'True':
+                connectionLog.info("Sending notification!")
+                wasSent, response = notification(lastErrorReason, downtime, unit, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
+                connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
+                if wasSent == 'False':
+                    connectionLog.critical("Sending notification error: " + str(response))
+        else: # It's down
+            timeWhenItWasDown = time.time()
+            lastErrorReason = errorReason
+            connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
         isUpLast = isUp
         time.sleep(configs.connInterval)
 
@@ -65,6 +65,11 @@ def get_downtime(timeWhenItWasDown, timeWhenItTurnsUp):
     else:
         unit = 'seconds'
     return round(downtime, 2), unit
+
+def notification(lastErrorReason, downtime, unit, phoneNumber, apiKey, fakeModeEnabled):
+    customMessage = custom_notification_message(lastErrorReason, downtime, unit)
+    wasSent, response = send_free_notification(customMessage, phoneNumber, apiKey, fakeModeEnabled)
+    return wasSent, response
 
 def custom_notification_message(errorMessage, downtime, unit):
     errorMessage = str(errorMessage)

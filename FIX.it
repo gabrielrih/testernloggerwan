@@ -1,0 +1,9 @@
+INSTALL
+- Ask if the configuration file must be changed or not
+    This is DONE. Test needed.
+
+TEST CONNECTION
+- Add a new config to inform how the minimum downtime to consider a WAN downtime. The default must log everything.
+
+OTHERS
+- Create the README file

@@ -1,10 +1,10 @@
 [Unit]
-Description=It tests the WAN connection all the time
+Description=It tests the WAN connection
 
 [Service]
 User=root
-WorkingDirectory=/opt/testerNlogger/
-ExecStart=/opt/testerNlogger/run.sh
+WorkingDirectory=/opt/testerNlogger
+ExecStart=python3 /opt/testerNlogger/testerNlogger.py --config /etc/testerNlogger/config.ini
 Restart=always
 
 [Install]

@@ -58,3 +58,20 @@ ENABLE_FAKE_MODE = False
 PHONE_NUMBER = +555599887766
 API_KEY = 123456
 ```
+
+
+# For dev environment
+
+You can manually start the script running this command:
+
+``
+python3 testerNlogger.py --config config/config.ini
+``
+
+Remember to point the --config argument to your config file.
+
+You also can enable the debug mode:
+
+``
+python3 testerNlogger.py --config config/config.ini --debug
+``

@@ -112,6 +112,7 @@ service() {
     echo "[+] Removing service..."
     serviceExists=$(systemctl list-units --full -all | grep "$SERVICE_TEMPLATE_FILENAME" | wc -l)
     if [ $serviceExists -eq 1 ]; then # the service already exists, so stop and disable it
+        systemctl daemon-reload
         systemctl stop $SERVICE_TEMPLATE_FILENAME
         systemctl disable $SERVICE_TEMPLATE_FILENAME
         systemctl daemon-reload

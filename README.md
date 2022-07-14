@@ -11,9 +11,9 @@ Here we have a example of how to install it in a Linux machine. Just pay attenti
 
 ``tar -xf 2.0.0.tar.gz``
 
-``cd testerNlogger-2.0.0``
+``cd testerNloggerWAN-2.0.0``
 
-``sudo chmod 744 testerNlogger.py``
+``sudo chmod 744 install.sh``
 
 ``sudo ./install.sh``
 

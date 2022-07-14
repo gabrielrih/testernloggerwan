@@ -1,6 +1,6 @@
 # testerNloggerWAN
-It tests the WAN connection and it logs the status on every change.
-The test connection works building a socker to Google DNS server and if it fails consider the WAN connection as down.
+It tests the WAN connection and logs the status on every change.
+The connection process works building a socket to Google DNS server and if fails the WAN connection is considered as down.
 
 ## How to install it
 Here we have a example of how to install it in a Linux machine. Just pay attention to install the latest version.

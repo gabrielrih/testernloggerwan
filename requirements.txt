@@ -1,3 +1,4 @@
 argparse
 configparser
 requests
+git+https://github.com/gabrielrih/callmebot.git@1.0.1

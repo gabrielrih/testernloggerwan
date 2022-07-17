@@ -10,8 +10,8 @@ from os.path import exists
 from libs.argument import get_arguments
 from libs.connection import *
 from libs.logger import *
-from libs.notification import send_free_notification
 import libs.config as config
+from callmebot import send_free_notification # Module from GitHub
 
 def main():
 
@@ -36,6 +36,7 @@ def main():
         isUp, errorReason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
         connectionLog.debug("Testing connection! isUp: " + str(isUp) + " isUpLast: " + str(isUpLast))
         if isUpLast == isUp: # Connection status hasn't changed
+            time.sleep(configs.connInterval)
             continue
         if isUp:
             timeWhenItTurnsUp = time.time()
@@ -45,7 +46,7 @@ def main():
                 connectionLog.info("Sending notification!")
                 wasSent, response = notification(lastErrorReason, downtime, unit, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
                 connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
-                if wasSent == 'False':
+                if wasSent == False:
                     connectionLog.critical("Sending notification error: " + str(response))
         else: # It's down
             timeWhenItWasDown = time.time()

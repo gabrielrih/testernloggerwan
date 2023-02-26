@@ -91,7 +91,7 @@ log_handler() {
     fi
 
     # Replace variable for LOG FOLDER in config file
-    echo "[+] Replacing varibles in config file"
+    echo "[+] Replacing variables in config file"
     REPLACED_VALUE=$(echo $LOG_FOLDER | sed -e 's/\//\\\//g')
     sed -i "s/\/var\/log\/testerNlogger\//${REPLACED_VALUE}/g" $CONFIG_FOLDER/config.ini
 }
@@ -106,7 +106,7 @@ service() {
     # Replace variable value for:
     #   WorkingDirectory in service file
     #   ExecStart in service file
-    echo "[+] Replacing varibles in service file"
+    echo "[+] Replacing variables in service file"
     REPLACED_VALUE=$(echo $INSTALL_FOLDER | sed -e 's/\//\\\//g')
     sed -i "s/\/opt\/testerNlogger/${REPLACED_VALUE}/g" $FULL_INSTALL_FOLDER/service/$SERVICE_TEMPLATE_FILENAME
     REPLACED_VALUE=$(echo $CONFIG_FOLDER | sed -e 's/\//\\\//g')

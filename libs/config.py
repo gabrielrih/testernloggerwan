@@ -30,6 +30,14 @@ class Config:
             self.logClearFilesOnStart = self.config['LOG']['CLEAR_ALL_LOG_FILES_ON_START']
         except:
             self.logClearFilesOnStart = False
+        try:
+            self.logRotationMaxBytesSize = int(self.config['LOG']['ROTATION_MAX_BYTES_SIZE'])
+        except:
+            self.logRotationMaxBytesSize = 1000000 # 1MB
+        try:
+            self.logRotationMaxNumberOfFiles = int(self.config['LOG']['ROTATION_MAX_NUMBER_OF_FILES'])
+        except:
+            self.logRotationMaxNumberOfFiles = 10
         return self
 
     def _get_connection_configs(self):

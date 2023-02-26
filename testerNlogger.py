@@ -25,7 +25,11 @@ def main():
     # Start logger and cleaning up if needed
     if configs.logClearFilesOnStart == 'True':
         clear_logs(configs.logDefaultFolder, configs.logDefaultFilename)
-    connectionLog = start_logger(configs.logDefaultFolder, configs.logDefaultFilename, debugEnabled)
+    connectionLog = start_logger(configs.logDefaultFolder,
+                                 configs.logDefaultFilename,
+                                 configs.logRotationMaxBytesSize,
+                                 configs.logRotationMaxNumberOfFiles,
+                                 debugEnabled)
     connectionLog.info("Starting TesterNLogger process...")
     connectionLog.info("Testing the WAN connection every " + str(configs.connInterval) + " seconds.")
 
@@ -34,7 +38,7 @@ def main():
     isUpLast = True # Pretends the first connection test was UP
     while (True):
         isUp, errorReason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
-        connectionLog.debug("Testing connection! isUp: " + str(isUp) + " isUpLast: " + str(isUpLast))
+        connectionLog.debug("Testing connection... isUp: " + str(isUp) + " isUpLast: " + str(isUpLast))
         if isUpLast == isUp: # Connection status hasn't changed
             time.sleep(configs.connInterval)
             continue
@@ -43,11 +47,11 @@ def main():
             downtime, unit = get_downtime(timeWhenItWasDown, timeWhenItTurnsUp)
             connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' ' + unit + '.')
             if configs.notificationEnabled == 'True':
-                connectionLog.info("Sending notification!")
+                connectionLog.info("Sending notification...")
                 wasSent, response = notification(lastErrorReason, downtime, unit, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
                 connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
                 if wasSent == False:
-                    connectionLog.critical("Sending notification error: " + str(response))
+                    connectionLog.critical("Notification error: " + str(response))
         else: # It's down
             timeWhenItWasDown = time.time()
             lastErrorReason = errorReason

@@ -1,4 +1,4 @@
-argparse
-configparser
-requests
+argparse>=1.4
+configparser>=5.3
+requests>=2.22
 git+https://github.com/gabrielrih/callmebot.git@1.0.1

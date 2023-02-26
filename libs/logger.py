@@ -6,17 +6,26 @@
 import logging
 import os
 
-def start_logger(folder, filename, enableDebugMode = False):
+from logging.handlers import RotatingFileHandler
+from logging import Formatter
+
+def start_logger(folder,
+                 filename,
+                 rotationMaxBytesSize,
+                 rotationMaxNumberOfFiles,
+                 enableDebugMode = False
+                ):
     _create_folder(folder)
-    fullPath = _mount_fullpath(folder, filename)
-    logging.basicConfig(filename=fullPath,
-                        format='%(asctime)s %(levelname)s %(message)s',
-                        filemode='a')
     connectionLog = logging.getLogger()
+    connectionLog.setLevel(logging.INFO)
     if enableDebugMode == True:
         connectionLog.setLevel(logging.DEBUG)
-    else:
-        connectionLog.setLevel(logging.INFO)
+    # It's needed for rotating logs. Reference: https://www.blog.pythonlibrary.org/2014/02/11/python-how-to-create-rotating-logs/   
+    fullPath = _mount_fullpath(folder, filename)
+    handler = RotatingFileHandler(fullPath, maxBytes=rotationMaxBytesSize, backupCount=rotationMaxNumberOfFiles)
+    log_file_format = "%(asctime)s %(levelname)s %(message)s"
+    handler.setFormatter(Formatter(log_file_format))
+    connectionLog.addHandler(handler)
     return connectionLog
 
 def clear_logs(folder, filename):

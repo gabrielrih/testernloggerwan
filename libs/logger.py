@@ -23,7 +23,8 @@ def start_logger(folder,
     # It's needed for rotating logs. Reference: https://www.blog.pythonlibrary.org/2014/02/11/python-how-to-create-rotating-logs/   
     fullPath = _mount_fullpath(folder, filename)
     handler = RotatingFileHandler(fullPath, maxBytes=rotationMaxBytesSize, backupCount=rotationMaxNumberOfFiles)
-    log_file_format = "%(asctime)s %(levelname)s %(message)s"
+    # Reference: https://docs.python.org/3/library/logging.html#logrecord-attributes
+    log_file_format = "%(asctime)s %(levelname)s %(message)s %(funcName)s %(lineno)d"
     handler.setFormatter(Formatter(log_file_format))
     connectionLog.addHandler(handler)
     return connectionLog

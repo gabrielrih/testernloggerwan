@@ -44,11 +44,11 @@ def main():
             continue
         if isUp:
             timeWhenItTurnsUp = time.time()
-            downtime, unit = get_downtime(timeWhenItWasDown, timeWhenItTurnsUp)
-            connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' ' + unit + '.')
+            downtime = get_downtime_in_minutes(timeWhenItWasDown, timeWhenItTurnsUp)
+            connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' minute(s)')
             if configs.notificationEnabled == 'True':
                 connectionLog.info("Sending notification...")
-                wasSent, response = notification(lastErrorReason, downtime, unit, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
+                wasSent, response = notification(lastErrorReason, downtime, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
                 connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
                 if wasSent == False:
                     connectionLog.critical("Notification error: " + str(response))
@@ -59,27 +59,19 @@ def main():
         isUpLast = isUp
         time.sleep(configs.connInterval)
 
-def get_downtime(timeWhenItWasDown, timeWhenItTurnsUp):
+def get_downtime_in_minutes(timeWhenItWasDown, timeWhenItTurnsUp):
     downtime = timeWhenItTurnsUp - timeWhenItWasDown
-    if downtime >= 3600:
-        downtime = downtime / 60 / 60 # Seconds to hours
-        unit = 'hours'
-    elif downtime >= 60:
-        downtime = downtime / 60 # Seconds to minutes
-        unit = 'minutes'
-    else:
-        unit = 'seconds'
-    return round(downtime, 2), unit
+    return round(downtime / 60, 2)
 
-def notification(lastErrorReason, downtime, unit, phoneNumber, apiKey, fakeModeEnabled):
-    customMessage = custom_notification_message(lastErrorReason, downtime, unit)
+def notification(lastErrorReason, downtime, phoneNumber, apiKey, fakeModeEnabled):
+    customMessage = custom_notification_message(lastErrorReason, downtime)
     wasSent, response = send_free_notification(customMessage, phoneNumber, apiKey, fakeModeEnabled)
     return wasSent, response
 
-def custom_notification_message(errorMessage, downtime, unit):
+def custom_notification_message(errorMessage, downtime):
     errorMessage = str(errorMessage)
     customMessage = "Internet connection was down but now it is UP again. "
-    customMessage += "Downtime: " + str(downtime) + ' ' + unit + '.'
+    customMessage += "Downtime: " + str(downtime) + ' minute(s).'
     if errorMessage:
         customMessage += "\n"
         customMessage += "Error:" + str(errorMessage)

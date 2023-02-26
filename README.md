@@ -2,6 +2,13 @@
 It tests the WAN connection and logs the status on every change.
 The connection process works building a socket to Google DNS server and if fails the WAN connection is considered as down.
 
+## Contents
+- [How to install it](#how-to-install-it)
+- [How to check the log file](#how-to-check-the-log-file)
+- [How to change some configuration](#how-to-change-some-configuration)
+- [Receiving notification by WhatsAPP](#receiving-notification-by-whatsapp)
+- [For dev environment](#for-dev-environment)
+
 ## How to install it
 Here we have a example of how to install it in a Linux machine. Just pay attention to install the latest version.
 
@@ -24,10 +31,12 @@ sudo systemctl status testernlogger
 ``
 
 
-## How to check the log file?
+## How to check the log file
 ``
 tail -f /var/log/testerNlogger/testerNlogger.log
 ``
+
+... or use the local configured on the instalation
 
 
 ## How to change some configuration
@@ -60,7 +69,7 @@ API_KEY = 123456
 ```
 
 
-# For dev environment
+## For dev environment
 
 You can manually start the script running this command:
 

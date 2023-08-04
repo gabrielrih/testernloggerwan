@@ -39,7 +39,7 @@ tail -f /var/log/testerNlogger/testerNlogger.log
 ## How to change some configuration
 If you want to change some configuration, the default config file is "/etc/testerNlogger/config.ini" (you can change this folder in installation).
 
-``sh
+```sh
 sudo vi /etc/testerNlogger/config.ini
 ```
 

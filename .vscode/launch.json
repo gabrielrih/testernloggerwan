@@ -11,7 +11,7 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            "args": ["--config", "./config/config.ini"]
+            "args": ["--config", "./config/config.ini", "--debug"]
         }
     ]
 }

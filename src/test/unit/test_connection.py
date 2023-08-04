@@ -7,9 +7,9 @@ class TestConnection(TestCase):
     def test_connection_socket_when_success(self):
         success, message = test_connection_socket()
         self.assertTrue(success)
-        self.assertEqual(message, None)
+        self.assertIsNone(message)
 
-    def test_connection_socket_when_it_fails(self):
-        success, message = test_connection_socket(host='1.2.3.4', port=54, timeout=5)
+    def test_connection_socket_when_timed_out(self):
+        success, message = test_connection_socket(host='1.2.3.4', port=54, timeout=1)
         self.assertFalse(success)
         self.assertEqual(message, 'timed out')

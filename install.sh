@@ -34,6 +34,7 @@ py_files_handler() {
     echo "[+] Copying files to $INSTALL_FOLDER"
     if [ ! -d $FULL_INSTALL_FOLDER ]; then mkdir -p $FULL_INSTALL_FOLDER; fi
     cp testerNlogger.py $FULL_INSTALL_FOLDER
+    mkdir $FULL_INSTALL_FOLDER/src/lib/
     cp -R ./src/libs $FULL_INSTALL_FOLDER/src/libs
     chmod 744 $FULL_INSTALL_FOLDER/testerNlogger.py
 

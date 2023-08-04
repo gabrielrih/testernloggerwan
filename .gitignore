@@ -13,3 +13,6 @@ FIX.it
 
 # Coverage
 htmlcov
+
+# Testing
+log-test

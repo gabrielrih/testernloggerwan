@@ -10,3 +10,6 @@ config/config.ini
 
 # Others
 FIX.it
+
+# Coverage
+htmlcov

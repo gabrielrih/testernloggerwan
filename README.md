@@ -74,7 +74,9 @@ API_KEY = 123456
 You can manually start the script running this command:
 
 ``
-python3 testerNlogger.py --config config/config.ini
+pipenv install -d
+pipenv shell
+python testerNlogger.py --config config/config.ini
 ``
 
 Remember to point the --config argument to your config file.

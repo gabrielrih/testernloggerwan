@@ -6,12 +6,15 @@
 import time
 from os.path import exists
 
-# Private libraries
-from libs.argument import get_arguments
-from libs.connection import *
-from libs.logger import *
-import libs.config as config
-from callmebot import send_free_notification # Module from GitHub
+import src.libs.config as config
+from src.libs.argument import get_arguments
+from src.libs.connection import *
+from src.libs.logger import *
+from src.libs.notification import FakeNotification
+
+
+notification = FakeNotification()
+
 
 def main():
 
@@ -65,7 +68,7 @@ def get_downtime_in_minutes(timeWhenItWasDown, timeWhenItTurnsUp):
 
 def notification(lastErrorReason, downtime, phoneNumber, apiKey, fakeModeEnabled):
     customMessage = custom_notification_message(lastErrorReason, downtime)
-    wasSent, response = send_free_notification(customMessage, phoneNumber, apiKey, fakeModeEnabled)
+    wasSent, response = notification.send_notification(customMessage, phoneNumber, apiKey)
     return wasSent, response
 
 def custom_notification_message(errorMessage, downtime):

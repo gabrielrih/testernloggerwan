@@ -12,29 +12,26 @@ The connection process works building a socket to Google DNS server and if fails
 ## How to install it
 Here we have a example of how to install it in a Linux machine. Just pay attention to install the latest version.
 
-``cd /tmp``
-
-``wget https://github.com/gabrielrih/testerNloggerWAN/archive/refs/tags/X.X.X.tar.gz``
-
-``tar -xf X.X.X.tar.gz``
-
-``cd testerNloggerWAN-X.X.X``
-
-``sudo chmod 744 install.sh``
-
-``sudo ./install.sh``
+```sh
+cd /tmp
+wget https://github.com/gabrielrih/testerNloggerWAN/archive/refs/tags/X.X.X.tar.gz
+tar -xf X.X.X.tar.gz
+cd testerNloggerWAN-X.X.X
+sudo chmod 744 install.sh
+sudo ./install.sh
+```
 
 When the installation finished you'll have a Linux service running and monitoring your WAN connection.
 
-``
+```sh
 sudo systemctl status testernlogger
-``
+```
 
 
 ## How to check the log file
-``
+```sh
 tail -f /var/log/testerNlogger/testerNlogger.log
-``
+```
 
 ... or use the local configured on the instalation
 
@@ -42,16 +39,16 @@ tail -f /var/log/testerNlogger/testerNlogger.log
 ## How to change some configuration
 If you want to change some configuration, the default config file is "/etc/testerNlogger/config.ini" (you can change this folder in installation).
 
-``
+```sh
 sudo vi /etc/testerNlogger/config.ini
-``
+```
 
 After you change it, you must restart the service
 
-``
+```sh
 sudo systemctl restart testernlogger
 sudo systemctl status testernlogger
-``
+```
 
 
 ## Receiving notification by WhatsAPP
@@ -60,7 +57,7 @@ In the config file you have a group called "NOTIFICATION". In this group you can
 Is important to comment that you must authorize the CallMeBot to send messages to your phone number. To do this you must follow this [link](https://www.callmebot.com/blog/free-api-whatsapp-messages/).
 
 
-```
+```yaml
 [NOTIFICATION]
 ENABLE_NOTIFICATION = True
 ENABLE_FAKE_MODE = False
@@ -73,14 +70,16 @@ API_KEY = 123456
 
 You can manually start the script running this command:
 
-``
-python3 testerNlogger.py --config config/config.ini
-``
+```sh
+pipenv install -d
+pipenv shell
+python testerNlogger.py --config config/config.ini
+```
 
 Remember to point the --config argument to your config file.
 
 You also can enable the debug mode:
 
-``
+```sh
 python3 testerNlogger.py --config config/config.ini --debug
-``
+```

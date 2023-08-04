@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+argparse = ">=1.4"
+configparser = ">=5.3"
+requests = ">=2.22"
+callmebot = {git = "git+https://github.com/gabrielrih/callmebot.git", ref = "1.0.1"}
+
+[dev-packages]
+pytest = "*"
+coverage = "*"
+
+[requires]
+python_version = "3.11"

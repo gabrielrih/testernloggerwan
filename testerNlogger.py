@@ -6,12 +6,12 @@
 import time
 from os.path import exists
 
-# Private libraries
-from libs.argument import get_arguments
-from libs.connection import *
-from libs.logger import *
-import libs.config as config
-from callmebot import send_free_notification # Module from GitHub
+import src.libs.config as config
+from src.libs.argument import get_arguments
+from src.libs.connection import *
+from src.libs.logger import *
+from src.libs.notification import SMSNotification
+
 
 def main():
 
@@ -48,7 +48,9 @@ def main():
             connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' minute(s)')
             if configs.notificationEnabled == 'True':
                 connectionLog.info("Sending notification...")
-                wasSent, response = notification(lastErrorReason, downtime, configs.notificationPhoneNumber, configs.notificationApiKey, configs.notificationFakeModeEnabled)
+                notification = SMSNotification(configs.notificationApiKey)
+                customMessage = custom_notification_message(lastErrorReason, downtime)
+                wasSent, response = notification.send_notification(customMessage, configs.notificationPhoneNumber)
                 connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
                 if wasSent == False:
                     connectionLog.critical("Notification error: " + str(response))
@@ -59,14 +61,11 @@ def main():
         isUpLast = isUp
         time.sleep(configs.connInterval)
 
+
 def get_downtime_in_minutes(timeWhenItWasDown, timeWhenItTurnsUp):
     downtime = timeWhenItTurnsUp - timeWhenItWasDown
     return round(downtime / 60, 2)
 
-def notification(lastErrorReason, downtime, phoneNumber, apiKey, fakeModeEnabled):
-    customMessage = custom_notification_message(lastErrorReason, downtime)
-    wasSent, response = send_free_notification(customMessage, phoneNumber, apiKey, fakeModeEnabled)
-    return wasSent, response
 
 def custom_notification_message(errorMessage, downtime):
     errorMessage = str(errorMessage)
@@ -76,6 +75,7 @@ def custom_notification_message(errorMessage, downtime):
         customMessage += "\n"
         customMessage += "Error:" + str(errorMessage)
     return customMessage
+
 
 if __name__ == '__main__':
     main()

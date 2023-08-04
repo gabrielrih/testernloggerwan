@@ -34,7 +34,6 @@ py_files_handler() {
     echo "[+] Copying files to $INSTALL_FOLDER"
     if [ ! -d $FULL_INSTALL_FOLDER ]; then mkdir -p $FULL_INSTALL_FOLDER; fi
     cp testerNlogger.py $FULL_INSTALL_FOLDER
-    cp uninstall.sh $FULL_INSTALL_FOLDER
     mkdir -p $FULL_INSTALL_FOLDER/src/
     cp ./src/__init__.py $FULL_INSTALL_FOLDER/src/__init__.py
     cp -R ./src/libs $FULL_INSTALL_FOLDER/src/libs

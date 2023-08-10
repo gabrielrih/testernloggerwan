@@ -1,0 +1,14 @@
+.github
+.pytest_cache
+.vscode
+config/config.ini
+htmlcov
+log
+log-test
+service
+.coverage
+compose.yaml
+Dockerfile
+Pipfile
+Pipfile.lock
+test

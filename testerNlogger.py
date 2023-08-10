@@ -11,6 +11,7 @@ from src.libs.argument import get_arguments
 from src.libs.connection import *
 from src.libs.logger import *
 from src.libs.notification import SMSNotification
+from src.libs.util import get_downtime_in_minutes, custom_notification_message
 
 
 def main():
@@ -60,21 +61,6 @@ def main():
             connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
         isUpLast = isUp
         time.sleep(configs.connInterval)
-
-
-def get_downtime_in_minutes(timeWhenItWasDown, timeWhenItTurnsUp):
-    downtime = timeWhenItTurnsUp - timeWhenItWasDown
-    return round(downtime / 60, 2)
-
-
-def custom_notification_message(errorMessage, downtime):
-    errorMessage = str(errorMessage)
-    customMessage = "Internet connection was down but now it is UP again. "
-    customMessage += "Downtime: " + str(downtime) + ' minute(s).'
-    if errorMessage:
-        customMessage += "\n"
-        customMessage += "Error:" + str(errorMessage)
-    return customMessage
 
 
 if __name__ == '__main__':

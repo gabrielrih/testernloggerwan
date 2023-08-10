@@ -1,9 +1,3 @@
-"""
-    It tests the connection to an IP and Port through a socket.
-    For testing the WAN connection for example, I recommend the use of an reliability DNS server, like Google or CloudFlare.
-    Reference: https://stackoverflow.com/questions/3764291/how-can-i-see-if-theres-an-available-and-active-network-connection-in-python
-    <gabrielrih>
-"""
 import socket
 
 

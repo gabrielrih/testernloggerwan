@@ -8,8 +8,8 @@ from os.path import exists
 
 import src.libs.config as config
 from src.libs.argument import get_arguments
-from src.libs.connection import *
-from src.libs.logger import *
+from src.libs.connection import test_connection_socket
+from src.libs.logger import start_logger, clear_logs
 from src.libs.notification import SMSNotification
 from src.libs.util import get_downtime_in_minutes, custom_notification_message
 
@@ -22,7 +22,7 @@ def main():
         raise Exception("ERROR: Config file wasn't found! Check if the config file exists and if it has the right name.")
     configs = config.Config(configFileName)
     configs.get_configs()
-    
+
     # Start logger and cleaning up if needed
     if configs.logClearFilesOnStart == 'True':
         clear_logs(configs.logDefaultFolder, configs.logDefaultFilename)
@@ -35,7 +35,9 @@ def main():
     connectionLog.info("Testing the WAN connection every " + str(configs.connInterval) + " seconds.")
 
     # Connection check
-    connectionLog.info("Connection configs: IP " + str(configs.connDNSServerIP) + " Port " + str(configs.conDNSServerPort) + " Timeout " + str(configs.connTimeOut))
+    connectionLog.info("Connection configs: IP " + str(configs.connDNSServerIP) + \
+                        " Port " + str(configs.conDNSServerPort) + \
+                        " Timeout " + str(configs.connTimeOut))
     isUpLast = True # Pretends the first connection test was UP
     while (True):
         isUp, errorReason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
@@ -58,7 +60,7 @@ def main():
         else: # It's down
             timeWhenItWasDown = time.time()
             lastErrorReason = errorReason
-            connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)            
+            connectionLog.warning("Internet connection is DOWN! Error: " + errorReason)
         isUpLast = isUp
         time.sleep(configs.connInterval)
 

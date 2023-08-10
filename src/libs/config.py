@@ -25,7 +25,7 @@ class Config:
         # Optional
         try:
             self.logDefaultFilename = self.config['LOG']['DEFAULT_FILENAME']
-        except:
+        except IndexError:
             self.logDefaultFilename = "testerNlogger.log"
         try:
             self.logClearFilesOnStart = self.config['LOG']['CLEAR_ALL_LOG_FILES_ON_START']

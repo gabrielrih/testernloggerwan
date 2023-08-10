@@ -33,7 +33,7 @@ class Config:
             self.logClearFilesOnStart = False
         try:
             self.logRotationMaxBytesSize = int(self.config['LOG']['ROTATION_MAX_BYTES_SIZE'])
-        except IndexError:
+        except:
             self.logRotationMaxBytesSize = 1000000  # 1MB
         try:
             self.logRotationMaxNumberOfFiles = int(self.config['LOG']['ROTATION_MAX_NUMBER_OF_FILES'])
@@ -45,7 +45,7 @@ class Config:
         # Optional
         try:
             self.connInterval = int(self.config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
-        except IndexError:
+        except:
             self.connInterval = 15
         try:
             self.connDNSServerIP = self.config['CONNECTION']['DNS_SERVER_IP']

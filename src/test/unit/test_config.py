@@ -5,7 +5,6 @@ from unittest import TestCase
 from src.libs.config import Config
 
 
-
 class TestConfigAllConfigs(TestCase):
     ''' Testing the config file when all configurations are present on the file '''
 
@@ -52,6 +51,7 @@ class SetUpClass(TestCase):
 
     def tearDown(self):
         self.tearDown()
+
 
 class TestOnlyRequiredConfigs(SetUpClass):
     ''' Testing the config file when just the required configurations are set '''

@@ -22,10 +22,9 @@ class Config:
         except (IndexError, KeyError):
             self.logDefaultFilename = "testerNlogger.log"
         try:
+            self.logClearFilesOnStart = False
             if self.config['LOG']['CLEAR_ALL_LOG_FILES_ON_START'] == 'True':
                 self.logClearFilesOnStart = True
-            else:
-                self.logClearFilesOnStart = False
         except (IndexError, KeyError):
             self.logClearFilesOnStart = False
         try:
@@ -61,10 +60,9 @@ class Config:
     def _get_notification_configs(self):
         # Optional
         try:
+            self.notificationEnabled = False
             if self.config['NOTIFICATION']['ENABLE_NOTIFICATION'] == 'True':
                 self.notificationEnabled = True
-            else:
-                self.notificationEnabled = False
         except (IndexError, KeyError):
             self.notificationEnabled = False
         # Required
@@ -76,10 +74,9 @@ class Config:
             self.notificationApiKey = ''
         # Optional
         try:
+            self.notificationFakeModeEnabled = False
             if self.config['NOTIFICATION']['ENABLE_FAKE_MODE'] == 'True':
                 self.notificationFakeModeEnabled = True
-            else:
-                self.notificationFakeModeEnabled = False
         except (IndexError, KeyError):
             self.notificationFakeModeEnabled = False
         return self

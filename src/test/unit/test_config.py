@@ -47,10 +47,10 @@ class TestConfigAllConfigs(TestCase):
 
 class SetUpClass(TestCase):
     def setUp(self):
-        self.setUp()
+        self.setUpMyStuffs()
 
     def tearDown(self):
-        self.tearDown()
+        self.tearDownMyStuffs()
 
 
 class TestOnlyRequiredConfigs(SetUpClass):
@@ -58,13 +58,13 @@ class TestOnlyRequiredConfigs(SetUpClass):
 
     __CONFIG_FILE = "./config/config-test.ini"
 
-    def setUp(self):
+    def setUpMyStuffs(self):
         with open(self.__CONFIG_FILE, 'w') as fp:
             fp.write('')
             fp.write('[LOG]')
             fp.write('\nDEFAULT_FOLDER = /var/log/testerNlogger/')
 
-    def tearDown(self):
+    def tearDownMyStuffs(self):
         os.remove(self.__CONFIG_FILE)
 
     def test_check_default_connection_configs(self):

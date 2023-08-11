@@ -10,8 +10,8 @@ def get_arguments() -> (str, str):
     parser.add_argument('--debug', help='Enabled debug mode', action="store_true")
     args = parser.parse_args()
     if args.debug:
-        debugEnabled = True
+        debug_enabled = True
     else:
-        debugEnabled = False
-    configFileName = args.config
-    return configFileName, debugEnabled
+        debug_enabled = False
+    config_filename = args.config
+    return config_filename, debug_enabled

@@ -38,31 +38,33 @@ def main():
     connectionLog.info("Connection configs: IP " + str(configs.connDNSServerIP) + \
                         " Port " + str(configs.conDNSServerPort) + \
                         " Timeout " + str(configs.connTimeOut))
-    isUpLast = True # Pretends the first connection test was UP
+    is_up_last = True # Pretends the first connection test was UP
+    time_since_the_epoch_when_it_was_down = None # Initialize to avoid flake8 error (F821 undefined name)
+    last_error_reason = None # Initialize to avoid flake8 error (F821 undefined name)
     while (True):
-        isUp, error_reason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
-        connectionLog.debug("Testing connection... isUp: " + str(isUp) + " isUpLast: " + str(isUpLast))
-        if isUpLast == isUp: # Connection status hasn't changed
+        is_up, error_reason = test_connection_socket(configs.connDNSServerIP, configs.conDNSServerPort, configs.connTimeOut)
+        connectionLog.debug("Testing connection... is_up: " + str(is_up) + " is_up_last: " + str(is_up_last))
+        if is_up_last == is_up: # Connection status hasn't changed
             time.sleep(configs.connInterval)
             continue
-        if isUp:
+        if is_up:
             time_since_the_epoch_when_it_turns_up = time.time()
             downtime_in_minutes = get_downtime_in_minutes(time_since_the_epoch_when_it_was_down, \
-                                               time_since_the_epoch_when_it_turns_up)
+                                                          time_since_the_epoch_when_it_turns_up)
             connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime_in_minutes) + ' minute(s)')
             if configs.notificationEnabled == 'True':
                 connectionLog.info("Sending notification...")
                 notification = SMSNotification(configs.notificationApiKey)
-                customMessage = custom_notification_message(last_error_reason, downtime_in_minutes)
-                wasSent, response = notification.send_notification(customMessage, configs.notificationPhoneNumber)
-                connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
-                if wasSent == False:
+                custom_message = custom_notification_message(last_error_reason, downtime_in_minutes)
+                was_sent, response = notification.send_notification(custom_message, configs.notificationPhoneNumber)
+                connectionLog.debug("Notification - It was sent?: " + str(was_sent) + " | Response: " + str(response))
+                if was_sent == False:
                     connectionLog.critical("Notification error: " + str(response))
         else: # It's down
             time_since_the_epoch_when_it_was_down = time.time()
             last_error_reason = error_reason
             connectionLog.warning("Internet connection is DOWN! Error: " + error_reason)
-        isUpLast = isUp
+        is_up_last = is_up
         time.sleep(configs.connInterval)
 
 

@@ -12,10 +12,10 @@ from src.libs.util import get_downtime_in_minutes, custom_notification_message
 def main():
 
     # Get configs
-    configFileName, debugEnabled = get_arguments()
-    if not exists(configFileName):
+    config_filename, debug_enabled = get_arguments()
+    if not exists(config_filename):
         raise Exception("ERROR: Config file wasn't found! Check if the config file exists and if it has the right name.")
-    configs = config.Config(configFileName)
+    configs = config.Config(config_filename)
     configs.get_configs()
 
     # Start logger and cleaning up if needed
@@ -25,7 +25,7 @@ def main():
                                  configs.logDefaultFilename,
                                  configs.logRotationMaxBytesSize,
                                  configs.logRotationMaxNumberOfFiles,
-                                 debugEnabled)
+                                 debug_enabled)
     connectionLog.info("Starting TesterNLogger process...")
     connectionLog.info("Testing the WAN connection every " + str(configs.connInterval) + " seconds.")
 

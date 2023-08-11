@@ -47,12 +47,14 @@ def main():
             continue
         if isUp:
             timeWhenItTurnsUp = time.time()
-            downtime = get_downtime_in_minutes(timeWhenItWasDown, timeWhenItTurnsUp)
+            downtime = get_downtime_in_minutes(time_since_the_epoch_when_it_was_down=timeWhenItWasDown, \
+                                               time_since_the_epoch_when_it_turns_up=timeWhenItTurnsUp)
             connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime) + ' minute(s)')
             if configs.notificationEnabled == 'True':
                 connectionLog.info("Sending notification...")
                 notification = SMSNotification(configs.notificationApiKey)
-                customMessage = custom_notification_message(lastErrorReason, downtime)
+                customMessage = custom_notification_message(error_message=lastErrorReason, \
+                                                            downtime_in_minutes=downtime)
                 wasSent, response = notification.send_notification(customMessage, configs.notificationPhoneNumber)
                 connectionLog.debug("Notification - It was sent?: " + str(wasSent) + " | Response: " + str(response))
                 if wasSent == False:

@@ -1,9 +1,3 @@
-"""
-    Class for get the configurations based on a file.
-    It returns an error if the file doesn't exist or if it doesn't have the required configurations.
-    Reference: https://docs.python.org/3/library/configparser.html
-    <gabrielrih>
-"""
 import configparser
 
 

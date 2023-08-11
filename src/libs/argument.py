@@ -1,8 +1,3 @@
-"""
-    It works with command line arguments.
-    Reference: https://docs.python.org/3/library/argparse.html
-    <gabrielrih>
-"""
 import argparse
 
 

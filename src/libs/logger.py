@@ -1,8 +1,3 @@
-"""
-    This methods are used for start a manage a Log file.
-    Reference: https://docs.python.org/3/library/logging.html
-    <gabrielrih>
-"""
 import logging
 import os
 

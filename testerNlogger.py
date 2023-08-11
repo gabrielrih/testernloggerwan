@@ -1,8 +1,3 @@
-"""
-    Tester N Logger
-    It tests and it logs the wan connection status.
-    <gabrielrih>
-"""
 import time
 from os.path import exists
 

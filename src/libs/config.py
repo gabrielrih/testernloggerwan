@@ -19,19 +19,21 @@ class Config:
         # Optional
         try:
             self.logDefaultFilename = self.config['LOG']['DEFAULT_FILENAME']
-        except IndexError:
+        except (IndexError, KeyError):
             self.logDefaultFilename = "testerNlogger.log"
         try:
-            self.logClearFilesOnStart = self.config['LOG']['CLEAR_ALL_LOG_FILES_ON_START']
-        except IndexError:
+            self.logClearFilesOnStart = False
+            if self.config['LOG']['CLEAR_ALL_LOG_FILES_ON_START'] == 'True':
+                self.logClearFilesOnStart = True
+        except (IndexError, KeyError):
             self.logClearFilesOnStart = False
         try:
             self.logRotationMaxBytesSize = int(self.config['LOG']['ROTATION_MAX_BYTES_SIZE'])
-        except IndexError:
+        except (IndexError, KeyError):
             self.logRotationMaxBytesSize = 1000000  # 1MB
         try:
             self.logRotationMaxNumberOfFiles = int(self.config['LOG']['ROTATION_MAX_NUMBER_OF_FILES'])
-        except IndexError:
+        except (IndexError, KeyError):
             self.logRotationMaxNumberOfFiles = 10
         return self
 
@@ -39,30 +41,32 @@ class Config:
         # Optional
         try:
             self.connInterval = int(self.config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
-        except IndexError:
+        except (IndexError, KeyError):
             self.connInterval = 15
         try:
             self.connDNSServerIP = self.config['CONNECTION']['DNS_SERVER_IP']
-        except IndexError:
+        except (IndexError, KeyError):
             self.connDNSServerIP = "8.8.8.8"
         try:
             self.conDNSServerPort = int(self.config['CONNECTION']['DNS_SERVER_PORT'])
-        except IndexError:
+        except (IndexError, KeyError):
             self.conDNSServerPort = 53
         try:
             self.connTimeOut = int(self.config['CONNECTION']['TIME_OUT'])
-        except IndexError:
+        except (IndexError, KeyError):
             self.connTimeOut = 10
         return self
 
     def _get_notification_configs(self):
         # Optional
         try:
-            self.notificationEnabled = self.config['NOTIFICATION']['ENABLE_NOTIFICATION']
-        except IndexError:
+            self.notificationEnabled = False
+            if self.config['NOTIFICATION']['ENABLE_NOTIFICATION'] == 'True':
+                self.notificationEnabled = True
+        except (IndexError, KeyError):
             self.notificationEnabled = False
         # Required
-        if self.notificationEnabled == 'True':
+        if self.notificationEnabled:
             self.notificationPhoneNumber = self.config['NOTIFICATION']['PHONE_NUMBER']
             self.notificationApiKey = self.config['NOTIFICATION']['API_KEY']
         else:
@@ -70,7 +74,9 @@ class Config:
             self.notificationApiKey = ''
         # Optional
         try:
-            self.notificationFakeModeEnabled = self.config['NOTIFICATION']['ENABLE_FAKE_MODE']
-        except IndexError:
+            self.notificationFakeModeEnabled = False
+            if self.config['NOTIFICATION']['ENABLE_FAKE_MODE'] == 'True':
+                self.notificationFakeModeEnabled = True
+        except (IndexError, KeyError):
             self.notificationFakeModeEnabled = False
         return self

@@ -38,5 +38,5 @@ class TestConfig(TestCase):
         # When
         self.assertEqual(configs.notificationEnabled, str(False))
         self.assertEqual(configs.notificationFakeModeEnabled, str(False))
-        self.assertEqual(configs.notificationPhoneNumber, '') #  Empty when disabled
-        self.assertEqual(configs.notificationApiKey, '') #  Empty when disabled
+        self.assertEqual(configs.notificationPhoneNumber, '')  # Empty when disabled
+        self.assertEqual(configs.notificationApiKey, '')  # Empty when disabled

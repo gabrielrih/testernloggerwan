@@ -10,7 +10,7 @@ def start_logger(folder,
                  rotationMaxBytesSize,
                  rotationMaxNumberOfFiles,
                  enableDebugMode = False
-                ):
+                 ):
     _create_folder(folder)
     connectionLog = logging.getLogger()
     connectionLog.setLevel(logging.INFO)

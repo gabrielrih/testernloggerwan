@@ -13,9 +13,9 @@ class TestLogger(TestCase):
 
     def test_start_logger(self):
         # Given
-        logger = start_logger(self.__FOLDER, \
-                              self.__FILENAME, \
-                              self.__ROTATION_MAX_BYTES_SIZE, \
+        logger = start_logger(self.__FOLDER,
+                              self.__FILENAME,
+                              self.__ROTATION_MAX_BYTES_SIZE,
                               self.__ROTATION_MAX_NUMBER_OF_FILES,
                               True)
         # Then

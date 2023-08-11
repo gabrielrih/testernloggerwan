@@ -14,9 +14,10 @@ def start_logger(folder,
     _create_folder(folder)
     connectionLog = logging.getLogger()
     connectionLog.setLevel(logging.INFO)
-    if enableDebugMode == True:
+    if enableDebugMode:
         connectionLog.setLevel(logging.DEBUG)
-    # It's needed for rotating logs. Reference: https://www.blog.pythonlibrary.org/2014/02/11/python-how-to-create-rotating-logs/   
+    # It's needed for rotating logs.
+    # Reference: https://www.blog.pythonlibrary.org/2014/02/11/python-how-to-create-rotating-logs/
     fullPath = _mount_fullpath(folder, filename)
     handler = RotatingFileHandler(fullPath, maxBytes=rotationMaxBytesSize, backupCount=rotationMaxNumberOfFiles)
     # Reference: https://docs.python.org/3/library/logging.html#logrecord-attributes
@@ -25,14 +26,17 @@ def start_logger(folder,
     connectionLog.addHandler(handler)
     return connectionLog
 
+
 def clear_logs(folder, filename):
     fullPath = _mount_fullpath(folder, filename)
     if os.path.exists(fullPath):
         os.remove(fullPath)
 
+
 def _create_folder(folder):
     if not os.path.exists(folder):
         os.mkdir(folder)
+
 
 def _mount_fullpath(folder, filename):
     return folder + '/' + filename

@@ -5,7 +5,7 @@ from src.libs.config import Config
 
 class TestConfig(TestCase):
 
-    __CONFIG_FILE="./config/config-example.ini"
+    __CONFIG_FILE = "./config/config-example.ini"
 
     def test_check_connection_configs(self):
         # Given
@@ -38,5 +38,5 @@ class TestConfig(TestCase):
         # When
         self.assertEqual(configs.notificationEnabled, str(False))
         self.assertEqual(configs.notificationFakeModeEnabled, str(False))
-        self.assertEqual(configs.notificationPhoneNumber, '') # Empty when disabled
-        self.assertEqual(configs.notificationApiKey, '') # Empty when disabled
+        self.assertEqual(configs.notificationPhoneNumber, '') #  Empty when disabled
+        self.assertEqual(configs.notificationApiKey, '') #  Empty when disabled

@@ -1,6 +1,6 @@
 def get_downtime_in_minutes(time_since_the_epoch_when_it_was_down: float, time_since_the_epoch_when_it_turns_up: float) -> int:
     downtime = time_since_the_epoch_when_it_turns_up - time_since_the_epoch_when_it_was_down
-    return round(downtime / 60, 2) # returns in minutes
+    return round(downtime / 60, 2)  # returns in minutes
 
 
 def custom_notification_message(error_message: str, downtime_in_minutes: int) -> str:

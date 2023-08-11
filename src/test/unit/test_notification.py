@@ -19,7 +19,8 @@ class TestSMSNotification(TestCase):
         mock_send_notification.assert_called_once()
         self.assertFalse(success)
         is_expected_message = False
-        if expected_message_error_contains in message: is_expected_message = True
+        if expected_message_error_contains in message:
+            is_expected_message = True
         self.assertTrue(is_expected_message)
 
     @mock.patch('callmebot.send_free_notification')

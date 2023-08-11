@@ -1,9 +1,3 @@
-"""
-    Class for get the configurations based on a file.
-    It returns an error if the file doesn't exist or if it doesn't have the required configurations.
-    Reference: https://docs.python.org/3/library/configparser.html
-    <gabrielrih>
-"""
 import configparser
 
 
@@ -25,19 +19,19 @@ class Config:
         # Optional
         try:
             self.logDefaultFilename = self.config['LOG']['DEFAULT_FILENAME']
-        except:
+        except IndexError:
             self.logDefaultFilename = "testerNlogger.log"
         try:
             self.logClearFilesOnStart = self.config['LOG']['CLEAR_ALL_LOG_FILES_ON_START']
-        except:
+        except IndexError:
             self.logClearFilesOnStart = False
         try:
             self.logRotationMaxBytesSize = int(self.config['LOG']['ROTATION_MAX_BYTES_SIZE'])
-        except:
-            self.logRotationMaxBytesSize = 1000000 # 1MB
+        except IndexError:
+            self.logRotationMaxBytesSize = 1000000  # 1MB
         try:
             self.logRotationMaxNumberOfFiles = int(self.config['LOG']['ROTATION_MAX_NUMBER_OF_FILES'])
-        except:
+        except IndexError:
             self.logRotationMaxNumberOfFiles = 10
         return self
 
@@ -45,19 +39,19 @@ class Config:
         # Optional
         try:
             self.connInterval = int(self.config['CONNECTION']['INTERVAL_TO_TEST_CONNECTION_IN_SECONDS'])
-        except:
+        except IndexError:
             self.connInterval = 15
         try:
             self.connDNSServerIP = self.config['CONNECTION']['DNS_SERVER_IP']
-        except:
+        except IndexError:
             self.connDNSServerIP = "8.8.8.8"
         try:
             self.conDNSServerPort = int(self.config['CONNECTION']['DNS_SERVER_PORT'])
-        except:
+        except IndexError:
             self.conDNSServerPort = 53
         try:
             self.connTimeOut = int(self.config['CONNECTION']['TIME_OUT'])
-        except:
+        except IndexError:
             self.connTimeOut = 10
         return self
 
@@ -65,19 +59,18 @@ class Config:
         # Optional
         try:
             self.notificationEnabled = self.config['NOTIFICATION']['ENABLE_NOTIFICATION']
-        except:
+        except IndexError:
             self.notificationEnabled = False
         # Required
         if self.notificationEnabled == 'True':
             self.notificationPhoneNumber = self.config['NOTIFICATION']['PHONE_NUMBER']
             self.notificationApiKey = self.config['NOTIFICATION']['API_KEY']
-
         else:
             self.notificationPhoneNumber = ''
             self.notificationApiKey = ''
         # Optional
         try:
             self.notificationFakeModeEnabled = self.config['NOTIFICATION']['ENABLE_FAKE_MODE']
-        except:
+        except IndexError:
             self.notificationFakeModeEnabled = False
         return self

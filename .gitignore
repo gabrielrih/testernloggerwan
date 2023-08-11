@@ -3,6 +3,7 @@ log
 
 # Configs for testing
 config/config.ini
+config/config-test.ini
 
 # Unit test
 log-test

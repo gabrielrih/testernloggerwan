@@ -47,7 +47,7 @@ def main():
             downtime_in_minutes = get_downtime_in_minutes(time_since_the_epoch_when_it_was_down,
                                                           time_since_the_epoch_when_it_turns_up)
             connectionLog.warning("Internet connection is UP! Downtime: " + str(downtime_in_minutes) + ' minute(s)')
-            if configs.notificationEnabled == 'True':
+            if configs.notificationEnabled:
                 connectionLog.info("Sending notification...")
                 notification = SMSNotification(configs.notificationApiKey)
                 custom_message = custom_notification_message(last_error_reason, downtime_in_minutes)

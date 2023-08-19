@@ -11,11 +11,11 @@ if [ $(whoami) != root ]; then
 fi
 
 #Configurations
-APPLICATION_NAME="testerNlogger"
+APPLICATION_NAME="testernlogger"
 
 install_requirements() {
     echo "[+] Installing Python requirements"
-    pip install -r requirements.txt
+    pip install -r requirements/common.txt
 }
 
 py_files_handler() {
@@ -33,11 +33,11 @@ py_files_handler() {
     # Copying py files
     echo "[+] Copying files to $INSTALL_FOLDER"
     if [ ! -d $FULL_INSTALL_FOLDER ]; then mkdir -p $FULL_INSTALL_FOLDER; fi
-    cp testerNlogger.py $FULL_INSTALL_FOLDER
+    cp testernlogger.py $FULL_INSTALL_FOLDER
     mkdir -p $FULL_INSTALL_FOLDER/src/
     cp ./src/__init__.py $FULL_INSTALL_FOLDER/src/__init__.py
     cp -R ./src/libs $FULL_INSTALL_FOLDER/src/libs
-    chmod 744 $FULL_INSTALL_FOLDER/testerNlogger.py
+    chmod 744 $FULL_INSTALL_FOLDER/testernlogger.py
 
     # Symbolic link for the install folder
     echo "[+] Creating symbolic link for instalation folder..."
@@ -95,7 +95,7 @@ log_handler() {
     # Replace variable for LOG FOLDER in config file
     echo "[+] Replacing variables in config file"
     REPLACED_VALUE=$(echo $LOG_FOLDER | sed -e 's/\//\\\//g')
-    sed -i "s/\/var\/log\/testerNlogger\//${REPLACED_VALUE}/g" $CONFIG_FOLDER/config.ini
+    sed -i "s/\/var\/log\/testernlogger\//${REPLACED_VALUE}/g" $CONFIG_FOLDER/config.ini
 }
 
 service() {
@@ -110,9 +110,9 @@ service() {
     #   ExecStart in service file
     echo "[+] Replacing variables in service file"
     REPLACED_VALUE=$(echo $INSTALL_FOLDER | sed -e 's/\//\\\//g')
-    sed -i "s/\/opt\/testerNlogger/${REPLACED_VALUE}/g" $FULL_INSTALL_FOLDER/service/$SERVICE_TEMPLATE_FILENAME
+    sed -i "s/\/opt\/testernlogger/${REPLACED_VALUE}/g" $FULL_INSTALL_FOLDER/service/$SERVICE_TEMPLATE_FILENAME
     REPLACED_VALUE=$(echo $CONFIG_FOLDER | sed -e 's/\//\\\//g')
-    sed -i "s/\/etc\/testerNlogger/${REPLACED_VALUE}/g" $FULL_INSTALL_FOLDER/service/$SERVICE_TEMPLATE_FILENAME
+    sed -i "s/\/etc\/testernlogger/${REPLACED_VALUE}/g" $FULL_INSTALL_FOLDER/service/$SERVICE_TEMPLATE_FILENAME
 
     # Stopping and disable service (if it was already created earlier)
     # FIX IT: Check if the service exists
@@ -137,7 +137,7 @@ service() {
     systemctl start $SERVICE_TEMPLATE_FILENAME
 }
 
-echo "Starting TesterNLogger instalation..."
+echo "Starting testernlogger instalation..."
 install_requirements
 py_files_handler
 config_file_handler

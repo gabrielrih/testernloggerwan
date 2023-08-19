@@ -43,7 +43,7 @@ jobs:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
     - name: Vulnerability scan using safety package
       run: |
-        safety check -r requirements/dev.txt
+        safety check -r requirements/common.txt
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:

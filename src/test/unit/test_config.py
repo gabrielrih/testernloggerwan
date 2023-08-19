@@ -27,8 +27,8 @@ class TestConfigAllConfigs(TestCase):
         # Then
         configs = cf.get_configs()
         # When
-        self.assertEqual(configs.logDefaultFolder, '/var/log/testerNlogger/')
-        self.assertEqual(configs.logDefaultFilename, 'testerNlogger.log')
+        self.assertEqual(configs.logDefaultFolder, '/var/log/testernlogger/')
+        self.assertEqual(configs.logDefaultFilename, 'testernlogger.log')
         self.assertEqual(configs.logClearFilesOnStart, False)
         self.assertEqual(configs.logRotationMaxBytesSize, 1000000)
         self.assertEqual(configs.logRotationMaxNumberOfFiles, 10)
@@ -62,7 +62,7 @@ class TestOnlyRequiredConfigs(SetUpClass):
         with open(self.__CONFIG_FILE, 'w') as fp:
             fp.write('')
             fp.write('[LOG]')
-            fp.write('\nDEFAULT_FOLDER = /var/log/testerNlogger/')
+            fp.write('\nDEFAULT_FOLDER = /var/log/testernlogger/')
 
     def tearDownMyStuffs(self):
         os.remove(self.__CONFIG_FILE)
@@ -84,8 +84,8 @@ class TestOnlyRequiredConfigs(SetUpClass):
         # Then
         configs = cf.get_configs()
         # When
-        self.assertEqual(configs.logDefaultFolder, '/var/log/testerNlogger/')
-        self.assertEqual(configs.logDefaultFilename, 'testerNlogger.log')
+        self.assertEqual(configs.logDefaultFolder, '/var/log/testernlogger/')
+        self.assertEqual(configs.logDefaultFilename, 'testernlogger.log')
         self.assertEqual(configs.logClearFilesOnStart, False)
         self.assertEqual(configs.logRotationMaxBytesSize, 1000000)
         self.assertEqual(configs.logRotationMaxNumberOfFiles, 10)

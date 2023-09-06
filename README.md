@@ -1,15 +1,19 @@
-# testerNloggerWAN
+# testernlogger
 It tests the WAN connection and logs the status on every change.
 The connection process works building a socket to Google DNS server and if fails the WAN connection is considered as down.
 
 ## Contents
-- [How to install it](#how-to-install-it)
-- [How to check the log file](#how-to-check-the-log-file)
-- [How to change some configuration](#how-to-change-some-configuration)
-- [Receiving notification by WhatsAPP](#receiving-notification-by-whatsapp)
-- [For dev environment](#for-dev-environment)
+- [Installation and usage](#installation-and-usage)
+    - [How to install it](#how-to-install-it)
+    - [How to check the log file](#how-to-check-the-log-file)
+    - [How to change some configuration](#how-to-change-some-configuration)
+    - [Receiving notification by WhatsAPP](#receiving-notification-by-whatsapp)
+- [Development](#development)
+    - [Using Docker](#using-docker)
+    - [Running in your machine](#runnnig-in-your-machine)
 
-## How to install it
+## Installation and usage
+### How to install it
 Here we have a example of how to install it in a Linux machine. Just pay attention to install the latest version.
 
 ```sh
@@ -28,7 +32,7 @@ sudo systemctl status testernlogger
 ```
 
 
-## How to check the log file
+### How to check the log file
 ```sh
 tail -f /var/log/testerNlogger/testerNlogger.log
 ```
@@ -36,7 +40,7 @@ tail -f /var/log/testerNlogger/testerNlogger.log
 ... or use the local configured on the instalation
 
 
-## How to change some configuration
+### How to change some configuration
 If you want to change some configuration, the default config file is "/etc/testerNlogger/config.ini" (you can change this folder in installation).
 
 ```sh
@@ -51,7 +55,7 @@ sudo systemctl status testernlogger
 ```
 
 
-## Receiving notification by WhatsAPP
+### Receiving notification by WhatsAPP
 In the config file you have a group called "NOTIFICATION". In this group you can configure you phone number to receive notifications in WhatsApp everytime the WAN connection turns UP.
 
 Is important to comment that you must authorize the CallMeBot to send messages to your phone number. To do this you must follow this [link](https://www.callmebot.com/blog/free-api-whatsapp-messages/).
@@ -65,21 +69,44 @@ PHONE_NUMBER = +555599887766
 API_KEY = 123456
 ```
 
+## Development
+### Using Docker
 
-## For dev environment
-
-You can manually start the script running this command:
-
+Before you run it, we must create a custom config.ini file for testing:
 ```sh
-pipenv install -d
-pipenv shell
-python testerNlogger.py --config config/config.ini
+cp config/config-example.ini config/config.ini
 ```
 
-Remember to point the --config argument to your config file.
+Then, you can create a container to run the script:
+
+```sh
+docker compose up --build -d
+```
+
+The compose will create and run a container and sync the logs from _/var/log/testerNlogger/_ to _./log/_
+
+If you want to connect to the container you can run:
+
+```sh
+docker exec -it testernlogger /bin/bash
+```
+
+### Running in your machine
+
+Before you run it, we must create a custom config.ini file for testing:
+```sh
+cp config/config-example.ini config/config.ini
+```
+
+If you want to run in your machine you must install the depedencies and then run the script:
+
+```sh
+pip install -r requirements/commons.txt
+python testerNlogger.py --config config/config.ini
+```
 
 You also can enable the debug mode:
 
 ```sh
-python3 testerNlogger.py --config config/config.ini --debug
+python testerNlogger.py --config config/config.ini --debug
 ```

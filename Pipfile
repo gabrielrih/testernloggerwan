@@ -10,8 +10,9 @@ requests = ">=2.22"
 callmebot = {git = "git+https://github.com/gabrielrih/callmebot.git", ref = "1.0.1"}
 
 [dev-packages]
-pytest = "*"
-coverage = "*"
+pytest = ">=7.4"
+coverage = ">=7.3"
+safety = ">=2.3"
 
 [requires]
 python_version = "3.11"

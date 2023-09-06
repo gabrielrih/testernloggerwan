@@ -1,7 +1,10 @@
 .github
 .pytest_cache
 .vscode
-config/config.ini
+config/config-example.ini
+codecov.yml
+compose.yml
+install.sh
 htmlcov
 log
 log-test
@@ -12,3 +15,4 @@ Dockerfile
 Pipfile
 Pipfile.lock
 test
+sonar-project.properties

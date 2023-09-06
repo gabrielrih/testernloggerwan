@@ -1,0 +1,4 @@
+flake8
+pytest>=7.4
+coverage>=7.3
+safety>=2.3

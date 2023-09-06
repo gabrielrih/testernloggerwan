@@ -1,0 +1,6 @@
+services:
+  app:
+    build: .
+    container_name: testernlogger
+    volumes:
+      - ./log/:/var/log/testerNlogger/

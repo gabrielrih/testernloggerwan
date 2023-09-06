@@ -64,33 +64,33 @@ jobs:
         with:
           name: coverage.xml
           path: ./coverage.xml
-    security_scan:
-      runs-on: ubuntu-latest
-      name: Security scan
-      needs: [lint, unit_tests]
-      steps:
-        - uses: actions/checkout@v3
-        - name: Set up Python 3.11
-          uses: actions/setup-python@v3
-          with:
-            python-version: "3.11"
-        - name: Install dependencies
-          run: |
-            python -m pip install --upgrade pip
-            if [ -f requirements/dev.txt ]; then pip install -r requirements/dev.txt; fi
-            if [ -f requirements/common.txt ]; then pip install -r requirements/common.txt; fi
-        - name: Vulnerability scan on packages
-          run: |
-            safety check -r requirements/common.txt
-        - name: Vulnerability scan on dev packages
-          run: |
-            safety check -r requirements/dev.txt
-        - name: Download artifact coverage.xml
-          uses: actions/download-artifact@v3
-          with:
-            name: coverage.xml
-        - name: SonarCloud Scan
-          uses: sonarsource/sonarcloud-github-action@master
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  security_scan:
+    runs-on: ubuntu-latest
+    name: Security scan
+    needs: [lint, unit_tests]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements/dev.txt ]; then pip install -r requirements/dev.txt; fi
+          if [ -f requirements/common.txt ]; then pip install -r requirements/common.txt; fi
+      - name: Vulnerability scan on packages
+        run: |
+          safety check -r requirements/common.txt
+      - name: Vulnerability scan on dev packages
+        run: |
+          safety check -r requirements/dev.txt
+      - name: Download artifact coverage.xml
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage.xml
+      - name: SonarCloud Scan
+        uses: sonarsource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

@@ -108,7 +108,4 @@ jobs:
         with:
           tag_name: ${{ github.run_id }}
           release_name: ${{ github.run_id }}
-          body: |
-            Some changes:
-            - One
-            - Two
+          body_path: changelog_latest.txt

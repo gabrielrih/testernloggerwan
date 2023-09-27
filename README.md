@@ -11,6 +11,7 @@ The connection process works building a socket to Google DNS server and if fails
 - [Development](#development)
     - [Using Docker](#using-docker)
     - [Running in your machine](#runnnig-in-your-machine)
+    - [Changelog](#changelog)
 
 ## Installation and usage
 ### How to install it
@@ -110,3 +111,6 @@ You also can enable the debug mode:
 ```sh
 python testerNlogger.py --config config/config.ini --debug
 ```
+
+### Changelog
+You always must change the file [changelog_latest.txt](./changelog_latest.txt) informing the latest changes.

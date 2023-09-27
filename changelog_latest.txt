@@ -1,0 +1,2 @@
+Features:
+- Improve pipeline for generate release automatically and merging PR to main.
